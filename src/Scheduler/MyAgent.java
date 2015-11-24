@@ -64,6 +64,8 @@ public class MyAgent extends Agent {
 									System.out.println("- Service \"" + sd.getName() + "\" provided by agent "
 											+ provider.getName());
 									// adicionar agente a lista
+									agents.put(provider.getName(), provider);
+									sendMessage();
 								}
 							}
 						}
@@ -79,5 +81,24 @@ public class MyAgent extends Agent {
 		} catch (FIPAException e) {
 			e.printStackTrace();
 		}
+		
+		
 	}
+
+	public void sendMessage() {
+
+		if (agents.size() > 1) {
+			System.out.println("Sending............");
+			String temp = "cenas";
+			ACLMessage msg = new ACLMessage(ACLMessage.PROPOSE);
+			
+			agents.forEach((k,v) -> msg.addReceiver(v));
+			
+
+			msg.setContent("INVITATION-" + temp);
+			msg.setConversationId("schedule-align");
+			send(msg);
+		}
+	}
+
 }
