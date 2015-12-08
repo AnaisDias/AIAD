@@ -1,6 +1,9 @@
 package Scheduler;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
 import jade.core.AID;
 import jade.core.Agent;
 import jade.domain.DFService;
@@ -17,32 +20,38 @@ public class MyAgent extends Agent {
 
 	public MyAgent() {
 	}
+	
+	public ArrayList<AgentEvent> agentEvents = new ArrayList<AgentEvent>();
 
 	@Override
 	protected void setup() {
 		// TODO Auto-generated method stub
 		System.out.println("Hello. I, agent " + getAID().getName() + " am alive now.");
-		String serviceName = "Scheduler";
-
+		String serviceName = "schedule";
+		
+		
 		// Register the service
-		System.out.println("Agent " + getLocalName() + " registering service " + serviceName);
+	  	System.out.println("Agent "+getLocalName()+" registering service "+serviceName);
 
-		DFAgentDescription dfd = new DFAgentDescription();
-		dfd.setName(getAID());
-		ServiceDescription sd = new ServiceDescription();
-		sd.setName(serviceName);
-		sd.setType("Scheduler");
-		dfd.addServices(sd);
-
+	  	DFAgentDescription dfd = new DFAgentDescription();
+	      dfd.setName(getAID());
+	      ServiceDescription sd = new ServiceDescription();
+	      sd.setName(serviceName);
+	      sd.setType("Scheduler");
+	      dfd.addServices(sd);
+	      try {
+	         DFService.register(this, dfd);
+	      } catch(FIPAException e) {
+	         e.printStackTrace();
+	      }
 		// Build the description used as template for the subscription
 		DFAgentDescription template = new DFAgentDescription();
 		ServiceDescription templateSd = new ServiceDescription();
-		sd.setName(serviceName);
 		templateSd.setType("Scheduler");
 		template.addServices(templateSd);
 
-		addBehaviour(new SubscriptionInitiator(this,
-				DFService.createSubscriptionMessage(this, getDefaultDF(), template, null)) {
+		
+		addBehaviour(new SubscriptionInitiator(this, DFService.createSubscriptionMessage(this, getDefaultDF(), template, null)) {
 			/**
 			 * 
 			 */
@@ -56,19 +65,19 @@ public class MyAgent extends Agent {
 						for (int i = 0; i < results.length; ++i) {
 							DFAgentDescription dfd = results[i];
 							AID provider = dfd.getName();
-							// Iterator it = dfd.getAllServices();
+							if (!provider.toString().equals(getAID().toString())) {
+							//Iterator it = dfd.getAllServices();
 							if (dfd.getAllServices().hasNext()) {
 								ServiceDescription sd = (ServiceDescription) dfd.getAllServices().next();
 								if (sd.getType().equals("Scheduler")) {
 									System.out.println("Scheduler found:");
 									System.out.println("- Service \"" + sd.getName() + "\" provided by agent "
 											+ provider.getName());
-									// adicionar agente a lista
-									agents.put(provider.getName(), provider);
-									sendMessage();
+								//adicionar agente a lista
 								}
 							}
 						}
+					}
 					}
 					System.out.println();
 				} catch (FIPAException fe) {
@@ -76,29 +85,6 @@ public class MyAgent extends Agent {
 				}
 			}
 		});
-		try {
-			DFService.register(this, dfd);
-		} catch (FIPAException e) {
-			e.printStackTrace();
-		}
-		
-		
 	}
-
-	public void sendMessage() {
-
-		if (agents.size() > 1) {
-			System.out.println("Sending............");
-			String temp = "cenas";
-			ACLMessage msg = new ACLMessage(ACLMessage.PROPOSE);
-			
-			agents.forEach((k,v) -> msg.addReceiver(v));
-			
-
-			msg.setContent("INVITATION-" + temp);
-			msg.setConversationId("schedule-align");
-			send(msg);
-		}
-	}
-
+	
 }
