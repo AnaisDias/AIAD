@@ -16,12 +16,13 @@ import jade.proto.SubscriptionInitiator;
 public class MyAgent extends Agent {
 
 	private static final long serialVersionUID = 1L;
-	public HashMap<String, AID> agents = new HashMap<>();
-
+	public HashMap<String, AID> agentsMap = new HashMap<>();
+	public ArrayList<String> neighbors = new ArrayList<String>();
+	public ArrayList<AID> allAgents = new ArrayList<AID>();
 	public MyAgent() {
 	}
 	
-	public ArrayList<AgentEvent> agentEvents = new ArrayList<AgentEvent>();
+	public ArrayList<MyEvent> agentEvents = new ArrayList<MyEvent>();
 
 	@Override
 	protected void setup() {
@@ -73,8 +74,13 @@ public class MyAgent extends Agent {
 									System.out.println("Scheduler found:");
 									System.out.println("- Service \"" + sd.getName() + "\" provided by agent "
 											+ provider.getName());
-								//adicionar agente a lista
+								addAgent(provider);
+								System.out.println("Agent " + provider.getName() + " added to " + getAID().getName() + "'s agent list");
 								}
+							}
+							else {
+								removeAgent(dfd.getName());
+								System.out.println("Agent " + provider.getName() + " removed from " + getAID().getName() + "'s agent list");
 							}
 						}
 					}
@@ -85,6 +91,26 @@ public class MyAgent extends Agent {
 				}
 			}
 		});
+		allAgents.add(getAID());
 	}
 	
+	private void addAgent(AID agent){
+		allAgents.add(agent);
+		agentsMap.put(agent.getName(),agent);
+	}
+	
+	private void removeAgent(AID agent){
+		allAgents.remove(agent);
+		agentsMap.remove(agent.getName());
+	}
+	
+	@Override
+    protected void takeDown() {
+            try {
+				DFService.deregister(this);
+			} catch (FIPAException e) {
+				e.printStackTrace();
+			}
+            System.out.println("Agent " + getAID().getName() + " terminating.");
+    }
 }
