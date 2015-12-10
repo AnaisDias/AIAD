@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TextField layoutX="214.0" layoutY="37.0" promptText="Name" />
+      <DatePicker layoutX="202.0" layoutY="80.0" />
+      <Label layoutX="137.0" layoutY="85.0" prefHeight="15.0" prefWidth="56.0" text="From:" />
+      <Label layoutX="138.0" layoutY="135.0" prefHeight="15.0" prefWidth="56.0" text="To:" />
+      <DatePicker layoutX="203.0" layoutY="130.0" />
+      <Label layoutX="183.0" layoutY="189.0" text="Time:" />
+      <TextField layoutX="293.0" layoutY="185.0" prefHeight="25.0" prefWidth="37.0" />
+      <TextField layoutX="370.0" layoutY="185.0" prefHeight="25.0" prefWidth="37.0" />
+      <Label layoutX="345.0" layoutY="190.0" text="to" />
+      <Label layoutX="237.0" layoutY="189.0" text="From" />
+      <ScrollPane layoutX="27.0" layoutY="238.0" prefHeight="142.0" prefWidth="200.0">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <ListView layoutY="-17.0" prefHeight="200.0" prefWidth="200.0" />
+                  <Label layoutX="55.0" layoutY="15.0" text="Data 1..." />
+               </children>
+            </AnchorPane>
+        </content>
+      </ScrollPane>
+      <ScrollPane layoutX="370.0" layoutY="237.0" prefHeight="142.0" prefWidth="200.0">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <ListView layoutX="-14.0" prefHeight="200.0" prefWidth="200.0" />
+                  <CheckBox layoutX="42.0" layoutY="14.0" mnemonicParsing="false" text="CheckBox" />
+                  <CheckBox layoutX="42.0" layoutY="53.0" mnemonicParsing="false" text="CheckBox" />
+                  <CheckBox layoutX="42.0" layoutY="91.0" mnemonicParsing="false" text="CheckBox" />
+               </children>
+            </AnchorPane>
+        </content>
+      </ScrollPane>
+      <Label layoutX="427.0" layoutY="220.0" text="Invite agents:" />
+      <Button layoutX="269.0" layoutY="297.0" mnemonicParsing="false" text="Create" />
+   </children>
+</Pane>
