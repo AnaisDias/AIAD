@@ -2,6 +2,7 @@ package Scheduler;
 
 import java.util.ArrayList;
 
+import Constraints.Constraint;
 import Utilities.TimePeriod;
 import jade.core.AID;
 
@@ -12,7 +13,7 @@ public class MyEvent {
 	public ArrayList<TimePeriod> dateProposals;
 	public ArrayList<TimePeriod> possibilites;
 	public TimePeriod agreedTimePeriod;
-	public ArrayList<TimePeriod> constraints; //type will be changed to arraylist<constraints>
+	public ArrayList<Constraint> constraints;
 	
 	
 	public MyEvent(String name, long span, ArrayList<AID> guests, ArrayList<TimePeriod> proposals){
@@ -21,6 +22,28 @@ public class MyEvent {
 		this.guests = guests;
 		this.dateProposals=proposals;
 	}
+	
+	public void addConstraint(Constraint con){
+		constraints.add(con);
+	}
+	
+	public void calculatePossibilites(){
+		
+	}
+	
+	public int getSolutionCost(TimePeriod tp){
+		int cost = 0;
+
+        for (Constraint con : constraints) {
+            if (!con.satisfiedBy(tp)) {
+                cost += 1;
+            }
+        }
+
+        return cost;
+	}
+	
+	
 	
 	
 	
