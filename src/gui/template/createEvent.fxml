@@ -4,7 +4,6 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <TextField layoutX="214.0" layoutY="37.0" promptText="Name" />
@@ -18,20 +17,19 @@
       <Label layoutX="345.0" layoutY="190.0" text="to" />
       <Label layoutX="237.0" layoutY="189.0" text="From" />
       <ScrollPane layoutX="27.0" layoutY="238.0" prefHeight="142.0" prefWidth="200.0">
-        <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
-               <children>
-                  <ListView layoutY="-17.0" prefHeight="200.0" prefWidth="200.0" />
-                  <Label layoutX="55.0" layoutY="15.0" text="Data 1..." />
-               </children>
-            </AnchorPane>
-        </content>
+         <content>
+            <TableView prefHeight="200.0" prefWidth="200.0">
+              <columns>
+                <TableColumn prefWidth="183.0" text="Dates:" />
+              </columns>
+            </TableView>
+         </content>
       </ScrollPane>
       <ScrollPane layoutX="370.0" layoutY="237.0" prefHeight="142.0" prefWidth="200.0">
         <content>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <ListView layoutX="-14.0" prefHeight="200.0" prefWidth="200.0" />
+                  <ListView layoutX="-14.0" prefHeight="200.0" prefWidth="200.0" fx:id="agentsToInviteList" />
                   <CheckBox layoutX="42.0" layoutY="14.0" mnemonicParsing="false" text="CheckBox" />
                   <CheckBox layoutX="42.0" layoutY="53.0" mnemonicParsing="false" text="CheckBox" />
                   <CheckBox layoutX="42.0" layoutY="91.0" mnemonicParsing="false" text="CheckBox" />

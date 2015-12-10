@@ -18,7 +18,7 @@ public class MyAgent extends Agent {
 	private static final long serialVersionUID = 1L;
 	public HashMap<String, AID> agentsMap = new HashMap<>();
 	public ArrayList<String> neighbors = new ArrayList<String>();
-	public ArrayList<AID> allAgents = new ArrayList<AID>();
+	public static ArrayList<AID> allAgents = new ArrayList<AID>();
 	public MyAgent() {
 	}
 	

@@ -1,64 +1,77 @@
 package gui;
 
 import javafx.application.Application;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.*;
 import javafx.stage.Stage;
-import javafx.scene.*;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.*;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.HBoxBuilder;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Vector;
 import java.util.regex.Pattern;
-import static jade.Boot.parseCmdLineArgs;
-import jade.core.ProfileImpl;
-import jade.core.Runtime;
-import jade.util.leap.Properties;
-import jade.wrapper.StaleProxyException;
-import jade.wrapper.AgentContainer;
 
+import Scheduler.MyAgent;
+import jade.core.AID;
 
+public class AgentController{
 
-public class Main extends Application{
-
-	public static AgentContainer AgentsContainer = null;
+	@FXML
+    private ListView<String> agentsToInviteList;
 	
-	@Override
-	public void start(Stage primaryStage) {
+	@FXML
+    void handleButtonCreateAction(ActionEvent event) {
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("template/init.fxml"));
-			Scene scene = new Scene(root,600,400);
-			primaryStage.setScene(scene);
-			primaryStage.show();
+			  	FXMLLoader loader = new FXMLLoader(getClass().getResource("template/createEvent.fxml"));
+	            Stage stage = new Stage();
+	            stage.setTitle("Schedule an even with uSchedule");
+	            Scene scene = new Scene(loader.load());
+	            stage.setScene(scene);
+	            
+
+	            
+	            ObservableList<String> other_agents = FXCollections.observableArrayList();
+	            for (AID agent : MyAgent.allAgents) {
+	            	other_agents.add(agent.getName());
+				}
+	            
+	           // agentsToInviteList.setItems(FXCollections.observableList(other_agents));
+	            
+	            
+	           
+	            
+	            stage.show();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		
-		  ProfileImpl iae;
-		  Properties pp = parseCmdLineArgs(new String[]{ "-gui" });
-          iae = new ProfileImpl(pp);
-          AgentsContainer = Runtime.instance().createMainContainer(iae);
-	}
+		
+    }
 	
-	public static void main(String[] args) {
-		  try {
-	            launch(args);
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	        }
-	}
+	
 }
+
+
+
+
 	/*
 	Stage thestage;
 	Button btnCreateEvent;
