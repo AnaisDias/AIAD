@@ -10,17 +10,66 @@ public class MyEvent {
 	private String name;
 	private long span; //in minutes
 	public ArrayList<AID> guests;
-	public ArrayList<TimePeriod> dateProposals;
+
+	public TimePeriod dateProposal;
 	public ArrayList<TimePeriod> possibilites;
 	public TimePeriod agreedTimePeriod;
 	public ArrayList<Constraint> constraints;
 	
 	
-	public MyEvent(String name, long span, ArrayList<AID> guests, ArrayList<TimePeriod> proposals){
-		this.name=name;
-		this.span=span;
+	public MyEvent(String name, long span, ArrayList<AID> guests, TimePeriod proposal){
+		this.setName(name);
+		this.setSpan(span);
 		this.guests = guests;
-		this.dateProposals=proposals;
+		this.dateProposal=proposal;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public long getSpan() {
+		return span;
+	}
+
+	public void setSpan(long span) {
+		this.span = span;
+	}
+	
+	public ArrayList<AID> getGuests() {
+		return guests;
+	}
+	
+	public void setGuests(ArrayList<AID> guests) {
+		this.guests = guests;
+	}
+
+	public TimePeriod getDateProposal() {
+		return dateProposal;
+	}
+
+	public void setDateProposal(TimePeriod dateProposal) {
+		this.dateProposal = dateProposal;
+	}
+
+	public TimePeriod getAgreedTimePeriod() {
+		return agreedTimePeriod;
+	}
+
+	public void setAgreedTimePeriod(TimePeriod agreedTimePeriod) {
+		this.agreedTimePeriod = agreedTimePeriod;
+	}
+
+	public ArrayList<Constraint> getConstraints() {
+		return constraints;
+	}
+
+	public void setConstraints(ArrayList<Constraint> constraints) {
+		this.constraints = constraints;
 	}
 	
 	public void addConstraint(Constraint con){
@@ -42,6 +91,8 @@ public class MyEvent {
 
         return cost;
 	}
+	
+	
 	
 	
 	

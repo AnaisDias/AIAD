@@ -2,7 +2,9 @@ package Scheduler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import jade.core.AID;
 import jade.core.Agent;
@@ -16,17 +18,18 @@ import jade.proto.SubscriptionInitiator;
 public class MyAgent extends Agent {
 
 	private static final long serialVersionUID = 1L;
+	private boolean ready = false;
 	public HashMap<String, AID> agentsMap = new HashMap<>();
 	public ArrayList<String> neighbors = new ArrayList<String>();
 	public static ArrayList<AID> allAgents = new ArrayList<AID>();
+	public ArrayList<AID> readyAgents = new ArrayList<AID>();
+	public ArrayList<MyEvent> events = new ArrayList<MyEvent>();
+	public ArrayList<MyEvent> invitations = new ArrayList<MyEvent>();
+
 	public MyAgent() {
 	}
-	
-	public ArrayList<MyEvent> agentEvents = new ArrayList<MyEvent>();
-
 	@Override
 	protected void setup() {
-		// TODO Auto-generated method stub
 		System.out.println("Hello. I, agent " + getAID().getName() + " am alive now.");
 		String serviceName = "schedule";
 		
@@ -104,6 +107,87 @@ public class MyAgent extends Agent {
 		agentsMap.remove(agent.getName());
 	}
 	
+	public void sendInvitations(MyEvent event){
+		try {
+			invitations.add(event);
+
+			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+			msg.setConversationId("event-creation");
+
+			JSONObject json = new JSONObject();
+			json.put("name", event.getName());
+			json.put("span", event.getSpan());
+			ArrayList<String> guestnames = new ArrayList<String>();
+			for(AID guest : event.getGuests()){
+				guestnames.add(guest.getName());
+				msg.addReceiver(guest);
+			}
+			json.put("guests", guestnames);
+
+			json.put("proposalStartTime", event.getDateProposal().getStartTime().toString());
+			json.put("proposalEndTime", event.getDateProposal().getEndTime().toString());
+			
+			msg.setContent("INVITE:" + json);
+			send(msg);
+
+		} catch (JSONException e) {
+			e.printStackTrace();
+
+		}
+	}
+	
+	public void acceptInvitation(MyEvent event){
+		
+		invitations.remove(event);
+		events.add(event);
+		
+		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+		msg.setConversationId("event-creation");
+		msg.setContent("ACCEPT:" + event.getName());
+		event.getGuests().forEach(msg::addReceiver);
+		send(msg);
+		
+	}
+	
+	public void declineInvitation(MyEvent event){
+		events.remove(event);
+		invitations.remove(event);
+		
+		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+		msg.setConversationId("event-creation");
+		msg.setContent("DECLINE:"+ event.getName());
+		event.getGuests().forEach(msg::addReceiver);
+		
+		send(msg);
+	}
+	
+	public void sendReady(){
+		if(ready){
+			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+			msg.setConversationId("event-creation");
+			msg.setContent("READY: ");
+			allAgents.forEach(msg::addReceiver);
+			send(msg);
+		}
+	}
+	
+	public void sendHalt(){
+		if(!ready){
+			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+			msg.setConversationId("event-creation");
+			msg.setContent("HALT: ");
+			allAgents.forEach(msg::addReceiver);
+			send(msg);
+		}
+	}
+	
+	public boolean getReady() {
+		return ready;
+	}
+	public void setReady(boolean ready) {
+		this.ready = ready;
+	}
+	
 	@Override
     protected void takeDown() {
             try {
@@ -113,4 +197,5 @@ public class MyAgent extends Agent {
 			}
             System.out.println("Agent " + getAID().getName() + " terminating.");
     }
+	
 }
