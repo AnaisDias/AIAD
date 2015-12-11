@@ -1,46 +1,43 @@
 package gui;
 
-import javafx.application.Application;
-import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import Scheduler.MyAgent;
+import Scheduler.MyEvent;
+import jade.wrapper.AgentContainer;
+import jade.wrapper.AgentController;
+import jade.wrapper.StaleProxyException;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.*;
-import javafx.stage.Stage;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.HBoxBuilder;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Vector;
-import java.util.regex.Pattern;
+public class AgentFxController{
 
-import Scheduler.MyAgent;
-import jade.core.AID;
+	@FXML
+    public ListView<MyEvent> eventsAccepted;
+	AgentContainer agentsContainer;	
+	AgentController agentController;
+	MyAgent agent;
+	public AgentFxController(String agentName, AgentContainer agentsContainer) {
+		this.agentsContainer = agentsContainer;
+		try {	
+			agent = new MyAgent();
+			agentController = agentsContainer.acceptNewAgent(agentName, agent);
+			agentController.start();
+		} catch (StaleProxyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
-public class AgentController{
 
-	
-	
 	@FXML
     void handleButtonCreateAction(ActionEvent event) {
 		try {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("template/createEvent.fxml"));
+				loader.setController(new createEventController(this.agent));
 	            Stage stage = new Stage();
 	            stage.setTitle("Schedule an even with uSchedule");
 	            Scene scene = new Scene(loader.load());
@@ -48,9 +45,10 @@ public class AgentController{
 	            
 
 	            
-	            
+	            /*
 	            ObservableList<String> other_agents = FXCollections.observableArrayList();
-	            for (AID agent : MyAgent.allAgents) {
+	            for (AID agent : this.agent.allAgents) {
+	            	if(agent != this.agent.getAID())
 	            	other_agents.add(agent.getName());
 				}
 	            createEventController controller = loader.<createEventController>getController();
@@ -58,7 +56,7 @@ public class AgentController{
 	            
 	           //ListView<String> list = new ListView<>(other_agents);
 	           //list.setItems(FXCollections.observableList(other_agents));
-	            
+	            */
 	            
 	           
 	            
@@ -73,7 +71,19 @@ public class AgentController{
 	
 	@FXML
 	protected void initialize() {
+		
+		eventsAccepted.setItems(agent.events);
+	}
 
+
+	public void stop() {
+		try {
+			agentController.kill();
+		} catch (StaleProxyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 	

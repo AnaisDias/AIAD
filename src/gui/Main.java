@@ -34,8 +34,16 @@ public class Main extends Application{
 
 	@Override
 	public void start(Stage primaryStage) {
+		ProfileImpl iae;
+		Properties pp = parseCmdLineArgs(new String[]{ "-gui" });
+		iae = new ProfileImpl(pp);
+		AgentsContainer = Runtime.instance().createMainContainer(iae);
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("template/init.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("template/init.fxml"));
+			loader.setController(new MainController( AgentsContainer));
+
+			Parent root = loader.load();
+
 			Scene scene = new Scene(root,600,400);
 			primaryStage.setScene(scene);
 			primaryStage.show();
@@ -43,10 +51,6 @@ public class Main extends Application{
 			e.printStackTrace();
 		}
 		
-		 ProfileImpl iae;
-		 Properties pp = parseCmdLineArgs(new String[]{ "-gui" });
-         iae = new ProfileImpl(pp);
-         AgentsContainer = Runtime.instance().createMainContainer(iae);
 	}
 	
 	public static void main(String[] args) {

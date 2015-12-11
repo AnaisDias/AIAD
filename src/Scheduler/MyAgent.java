@@ -14,17 +14,18 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.proto.SubscriptionInitiator;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class MyAgent extends Agent {
 
 	private static final long serialVersionUID = 1L;
 	private boolean ready = false;
-	public HashMap<String, AID> agentsMap = new HashMap<>();
 	public ArrayList<String> neighbors = new ArrayList<String>();
-	public ArrayList<AID> allAgents = new ArrayList<AID>();
-	public ArrayList<AID> readyAgents = new ArrayList<AID>();
-	public ArrayList<MyEvent> events = new ArrayList<MyEvent>();
-	public ArrayList<MyEvent> invitations = new ArrayList<MyEvent>();
+	public  ObservableList<AID> allAgents = FXCollections.observableArrayList();
+	public ObservableList<AID> readyAgents = FXCollections.observableArrayList();
+	public ObservableList<MyEvent> events = FXCollections.observableArrayList();
+	public ObservableList<MyEvent> invitations = FXCollections.observableArrayList();
 
 	public MyAgent() {
 	}
@@ -99,12 +100,10 @@ public class MyAgent extends Agent {
 	
 	private void addAgent(AID agent){
 		allAgents.add(agent);
-		agentsMap.put(agent.getName(),agent);
 	}
 	
 	private void removeAgent(AID agent){
 		allAgents.remove(agent);
-		agentsMap.remove(agent.getName());
 	}
 	
 	public void sendInvitations(MyEvent event){
@@ -195,7 +194,7 @@ public class MyAgent extends Agent {
 			} catch (FIPAException e) {
 				e.printStackTrace();
 			}
-            System.out.println("Agent " + getAID().getName() + " terminating.");
+            System.out.println(getAID().getName() + ":  bye");
     }
 	
 }

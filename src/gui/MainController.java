@@ -2,36 +2,43 @@ package gui;
 
 import jade.wrapper.AgentContainer;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
-import Scheduler.*;
-import Utilities.*;
-
-import java.util.Random;
+import javafx.stage.WindowEvent;
 
 public class MainController {
 
-	@FXML
-    void handleStartAgentAction(ActionEvent event) {
-		try {
-		  	FXMLLoader loader = new FXMLLoader(getClass().getResource("template/agentView.fxml"));
-            Stage stage = new Stage();
-            stage.setTitle("Agent view");
-            Scene scene = new Scene(loader.load());
-            stage.setScene(scene);
-            stage.show();
+	public TextField agentName;
+	AgentContainer agentsContainer;
 
-		} catch(Exception e) {
-			e.printStackTrace();
-		
-	    }
+	public MainController(AgentContainer agentsContainer) {
+		this.agentsContainer = agentsContainer;
 	}
-	
+
+	@FXML
+	void handleStartAgentAction(ActionEvent event) {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("template/agentView.fxml"));
+			loader.setController(new AgentFxController(agentName.getText(), agentsContainer));
+
+			Stage stage = new Stage();
+			stage.setTitle("Agent view");
+			Scene scene = new Scene(loader.load());
+			stage.setScene(scene);
+			stage.show();
+			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+				public void handle(WindowEvent we) {
+					loader.<AgentFxController>getController().stop();
+				}
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		}
+	}
+
 }

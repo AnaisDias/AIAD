@@ -36,8 +36,12 @@ import jade.core.AID;
 public class createEventController {
 
 	@FXML
-    public ListView<String> agentsToInviteList;
-	
+    public ListView<AID> agentsToInviteList;
+	MyAgent agent;
+	public createEventController(MyAgent agent) {
+		this.agent= agent;
+	}
+
 	@FXML
     void inviteAgents(ActionEvent event) {
 		
@@ -46,6 +50,7 @@ public class createEventController {
 	
 	@FXML
 	protected void initialize() {
-		
+	
+		agentsToInviteList.setItems(agent.allAgents);
 	}
 }
