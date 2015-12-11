@@ -36,11 +36,16 @@ import jade.core.AID;
 public class createEventController {
 
 	@FXML
-    private ListView<String> agentsToInviteList;
+    public ListView<String> agentsToInviteList;
 	
 	@FXML
     void inviteAgents(ActionEvent event) {
 		
+		
+	}
+	
+	@FXML
+	protected void initialize() {
 		
 	}
 }

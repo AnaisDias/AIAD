@@ -53,9 +53,11 @@ public class AgentController{
 	            for (AID agent : MyAgent.allAgents) {
 	            	other_agents.add(agent.getName());
 				}
-	            ListView<String> list = new ListView<>(other_agents);
+	            createEventController controller = loader.<createEventController>getController();
+	            controller.agentsToInviteList.setItems(FXCollections.observableList(other_agents));
 	            
-	           // agentsToInviteList.setItems(FXCollections.observableList(other_agents));
+	           //ListView<String> list = new ListView<>(other_agents);
+	           //list.setItems(FXCollections.observableList(other_agents));
 	            
 	            
 	           
