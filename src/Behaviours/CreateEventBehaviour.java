@@ -19,6 +19,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
 public class CreateEventBehaviour extends SimpleBehaviour {
+	private static final long serialVersionUID = 1L;
 	private boolean done = false;
 
 	@Override
@@ -82,34 +83,80 @@ public class CreateEventBehaviour extends SimpleBehaviour {
 			
 			((MyAgent) myAgent).invitations.add(event);
 			((MyAgent) myAgent).setReady(false);
+			System.out.println("Agent invited to event " + eventname);
 		} catch (JSONException | ParseException e) {
 			e.printStackTrace();
 		}
 	}
 
 	private void handleAccept(ACLMessage msg) {
-		// check if sender is not self (if not, notify agent that he
-		// successfully joined event -> later)
-		// parse message data
-		// add participant either in agent's created events or invitations
+		boolean added = false;
+		if(!msg.getSender().equals(((MyAgent)myAgent).getAID())){
+			String stmsg = msg.getContent();
+			String[] sm = stmsg.split(":");
+			for(MyEvent ev: ((MyAgent)myAgent).events){
+				if(ev.getName().equals(sm[1])){
+					ev.guests.add(msg.getSender());
+					System.out.println(msg.getSender().getName() + " accepted event " + sm[1]);
+					added=true;
+				}
+			}
+			if(!added){
+				for(MyEvent ev: ((MyAgent)myAgent).invitations){
+					if(ev.getName().equals(sm[1])){
+						ev.guests.add(msg.getSender());
+						System.out.println(msg.getSender().getName() + " accepted event " + sm[1]);
+						added=true;
+					}
+				}
+			}
+			
+		}
+		else {
+			String stmsg = msg.getContent();
+			String[] sm = stmsg.split(":");
+			System.out.println("Agent successfully joined event " + sm[1]);
+		}
 
 	}
 
 	private void handleDecline(ACLMessage msg) {
-		// parse message data
-		// remove sender from event's participants
+		boolean removed = false;
+		String stmsg = msg.getContent();
+		String[] sm = stmsg.split(":");
+		for(MyEvent ev: ((MyAgent)myAgent).events){
+			if(ev.getName().equals(sm[1])){
+				ev.guests.remove(msg.getSender());
+				System.out.println(msg.getSender().getName() + " declined event " + sm[1]);
+				removed=true;
+			}
+		}
+		if(!removed){
+			for(MyEvent ev: ((MyAgent)myAgent).invitations){
+				if(ev.getName().equals(sm[1])){
+					ev.guests.remove(msg.getSender());
+					System.out.println(msg.getSender().getName() + " declined event " + sm[1]);
+					removed=true;
+				}
+			}
+		}
 
 	}
 
 	private void handleReady(ACLMessage msg) {
-		// add sender to readyagents
-		// if all agents are in ready agents -> finished = true
+		((MyAgent)myAgent).readyAgents.add(msg.getSender());
+		if(((MyAgent)myAgent).readyAgents.containsAll(((MyAgent)myAgent).allAgents)){
+			done=true;
+		}
+		else{
+			done=false;
+		}
 
 	}
 
 	private void handleHalt(ACLMessage msg) {
-		// remove sender from ready agents
-		// set done to false
+		((MyAgent)myAgent).readyAgents.remove(msg.getSender());
+		done=false;
 
 	}
 

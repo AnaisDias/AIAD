@@ -21,34 +21,20 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Vector;
 import java.util.regex.Pattern;
-import static jade.Boot.parseCmdLineArgs;
-import jade.core.ProfileImpl;
-import jade.core.Runtime;
-import jade.util.leap.Properties;
-import jade.wrapper.StaleProxyException;
-import jade.wrapper.AgentContainer;
-
-
 
 public class Main extends Application{
-
-	public static AgentContainer AgentsContainer = null;
 	
+
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("template/init.fxml"));
-			Scene scene = new Scene(root,600,400);
+			Parent root = FXMLLoader.load(getClass().getResource("template/main.fxml"));
+			Scene scene = new Scene(root,400,400);
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		
-		  ProfileImpl iae;
-		  Properties pp = parseCmdLineArgs(new String[]{ "-gui" });
-          iae = new ProfileImpl(pp);
-          AgentsContainer = Runtime.instance().createMainContainer(iae);
 	}
 	
 	public static void main(String[] args) {

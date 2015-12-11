@@ -21,7 +21,7 @@ public class MyAgent extends Agent {
 	private boolean ready = false;
 	public HashMap<String, AID> agentsMap = new HashMap<>();
 	public ArrayList<String> neighbors = new ArrayList<String>();
-	public static ArrayList<AID> allAgents = new ArrayList<AID>();
+	public ArrayList<AID> allAgents = new ArrayList<AID>();
 	public ArrayList<AID> readyAgents = new ArrayList<AID>();
 	public ArrayList<MyEvent> events = new ArrayList<MyEvent>();
 	public ArrayList<MyEvent> invitations = new ArrayList<MyEvent>();
