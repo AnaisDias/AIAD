@@ -18,6 +18,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.HBoxBuilder;
 import javafx.scene.layout.Priority;
@@ -37,6 +38,10 @@ public class createEventController {
 
 	@FXML
     public ListView<AID> agentsToInviteList;
+	
+	@FXML
+    private TextField name;
+	
 	MyAgent agent;
 	public createEventController(MyAgent agent) {
 		this.agent= agent;

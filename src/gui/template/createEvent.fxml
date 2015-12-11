@@ -1,41 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" >
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <TextField layoutX="214.0" layoutY="37.0" promptText="Name" />
-      <DatePicker layoutX="202.0" layoutY="80.0" />
-      <Label layoutX="137.0" layoutY="85.0" prefHeight="15.0" prefWidth="56.0" text="From:" />
-      <Label layoutX="138.0" layoutY="135.0" prefHeight="15.0" prefWidth="56.0" text="To:" />
-      <DatePicker layoutX="203.0" layoutY="130.0" />
-      <Label layoutX="183.0" layoutY="189.0" text="Time:" />
-      <TextField layoutX="293.0" layoutY="185.0" prefHeight="25.0" prefWidth="37.0" />
-      <TextField layoutX="370.0" layoutY="185.0" prefHeight="25.0" prefWidth="37.0" />
-      <Label layoutX="345.0" layoutY="190.0" text="to" />
-      <Label layoutX="237.0" layoutY="189.0" text="From" />
-      <ScrollPane layoutX="27.0" layoutY="238.0" prefHeight="142.0" prefWidth="200.0">
-         <content>
-            <TableView prefHeight="200.0" prefWidth="200.0">
-              <columns>
-                <TableColumn prefWidth="183.0" text="Dates:" />
-              </columns>
-            </TableView>
-         </content>
-      </ScrollPane>
-      <ScrollPane layoutX="370.0" layoutY="237.0" prefHeight="142.0" prefWidth="200.0">
+      <TextField layoutX="67.0" layoutY="42.0" prefHeight="29.0" prefWidth="197.0" promptText="Name" fx:id="name" />
+      <DatePicker layoutX="96.0" layoutY="121.0" fx:id="date_from"/>
+      <Label layoutX="31.0" layoutY="126.0" prefHeight="15.0" prefWidth="56.0" text="From:" />
+      <Label layoutX="32.0" layoutY="176.0" prefHeight="15.0" prefWidth="56.0" text="To:" />
+      <DatePicker layoutX="97.0" layoutY="171.0" fx:id="date_to"/>
+      <Label layoutX="77.0" layoutY="230.0" text="Time:" />
+      <TextField layoutX="187.0" layoutY="226.0" prefHeight="25.0" prefWidth="37.0" fx:id="time_from" />
+      <TextField layoutX="264.0" layoutY="226.0" prefHeight="25.0" prefWidth="37.0" fx:id="time_to" />
+      <Label layoutX="239.0" layoutY="231.0" text="to" />
+      <Label layoutX="131.0" layoutY="230.0" text="From" />
+      <ScrollPane layoutX="366.0" layoutY="66.0" prefHeight="187.0" prefWidth="200.0">
         <content>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <ListView layoutX="-14.0" prefHeight="200.0" prefWidth="200.0" fx:id="agentsToInviteList" />
+                  <ListView fx:id="agentsToInviteList" prefHeight="200.0" prefWidth="200.0" />
                   <Button layoutX="11.0" layoutY="500.0" mnemonicParsing="false" onAction="#inviteAgents" prefHeight="31.0" prefWidth="200.0" text="Invite" />
                </children>
             </AnchorPane>
         </content>
       </ScrollPane>
-      <Label layoutX="427.0" layoutY="220.0" text="Invite agents:" />
-      <Button layoutX="269.0" layoutY="297.0" mnemonicParsing="false" text="Create" />
+      <Label layoutX="399.0" layoutY="39.0" text="Invite agents:">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
+      <Button layoutX="215.0" layoutY="319.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="133.0" text="Create">
+         <font>
+            <Font name="Ubuntu Light" size="26.0" />
+         </font></Button>
+      <Separator layoutX="23.0" layoutY="287.0" prefHeight="15.0" prefWidth="549.0" />
    </children>
 </Pane>
