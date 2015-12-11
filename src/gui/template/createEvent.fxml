@@ -4,7 +4,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.createEventController">
    <children>
       <TextField layoutX="214.0" layoutY="37.0" promptText="Name" />
       <DatePicker layoutX="202.0" layoutY="80.0" />
@@ -30,9 +30,7 @@
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
                <children>
                   <ListView layoutX="-14.0" prefHeight="200.0" prefWidth="200.0" fx:id="agentsToInviteList" />
-                  <CheckBox layoutX="42.0" layoutY="14.0" mnemonicParsing="false" text="CheckBox" />
-                  <CheckBox layoutX="42.0" layoutY="53.0" mnemonicParsing="false" text="CheckBox" />
-                  <CheckBox layoutX="42.0" layoutY="91.0" mnemonicParsing="false" text="CheckBox" />
+                  <Button layoutX="11.0" layoutY="500.0" mnemonicParsing="false" onAction="#inviteAgents" prefHeight="31.0" prefWidth="200.0" text="Invite" />
                </children>
             </AnchorPane>
         </content>

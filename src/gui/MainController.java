@@ -19,9 +19,19 @@ import java.util.Random;
 public class MainController {
 
 	@FXML
-    void handleButtonCreateAction(ActionEvent event) {
-		System.out.println("You clicked me!");
-		/*tomorrow morning ill complete it  */
-    }
+    void handleStartAgentAction(ActionEvent event) {
+		try {
+		  	FXMLLoader loader = new FXMLLoader(getClass().getResource("template/agentView.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("Agent view");
+            Scene scene = new Scene(loader.load());
+            stage.setScene(scene);
+            stage.show();
+
+		} catch(Exception e) {
+			e.printStackTrace();
+		
+	    }
+	}
 	
 }

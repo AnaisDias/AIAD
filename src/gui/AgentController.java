@@ -12,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.*;
 import javafx.stage.Stage;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -34,13 +35,12 @@ import jade.core.AID;
 
 public class AgentController{
 
-	@FXML
-    private ListView<String> agentsToInviteList;
+	
 	
 	@FXML
     void handleButtonCreateAction(ActionEvent event) {
 		try {
-			  	FXMLLoader loader = new FXMLLoader(getClass().getResource("template/createEvent.fxml"));
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("template/createEvent.fxml"));
 	            Stage stage = new Stage();
 	            stage.setTitle("Schedule an even with uSchedule");
 	            Scene scene = new Scene(loader.load());
@@ -48,10 +48,12 @@ public class AgentController{
 	            
 
 	            
+	            
 	            ObservableList<String> other_agents = FXCollections.observableArrayList();
 	            for (AID agent : MyAgent.allAgents) {
 	            	other_agents.add(agent.getName());
 				}
+	            ListView<String> list = new ListView<>(other_agents);
 	            
 	           // agentsToInviteList.setItems(FXCollections.observableList(other_agents));
 	            
@@ -65,6 +67,12 @@ public class AgentController{
 		
 		
     }
+	
+	
+	@FXML
+	protected void initialize() {
+
+	}
 	
 	
 }
