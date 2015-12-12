@@ -1,20 +1,21 @@
 package Constraints;
 
-import java.util.Date;
+import java.util.Calendar;
 
 import Utilities.TimePeriod;
 
 public class AfterDateConstraint implements Constraint {
 	
-	private Date date;
+	private Calendar date;
 	
-	public AfterDateConstraint(Date date){
+	public AfterDateConstraint(Calendar date){
 		this.date=date;
 	}
 	@Override
 	public boolean satisfiedBy(TimePeriod tp) {
 		
-		return (date.getTime()<tp.getStartTime().getTime());
+		tp.getStartTime();
+		return (date.get(Calendar.DATE)<tp.getStartTime().get(Calendar.DATE));
 	}
 
 }

@@ -1,24 +1,25 @@
 package Constraints;
 
-import java.util.Date;
+import java.util.Calendar;
 
 import Utilities.TimePeriod;
 
 public class AfterHourConstraint implements Constraint{
 
-	public Date date;
+	private int hour;
+	private int minutes;
 	
-	public AfterHourConstraint(Date date){
-		this.date=date;
+	public AfterHourConstraint(int h, int m){
+		this.hour=h;
+		this.minutes=m;
 	}
 	
-	@SuppressWarnings("deprecation")//try to replace by non deprecated functions
 	@Override
 	public boolean satisfiedBy(TimePeriod tp) {
-		if(date.getHours()==tp.getStartTime().getHours()){
-			return (date.getMinutes()<tp.getStartTime().getMinutes());
+		if(hour==tp.getStartTime().get(Calendar.HOUR_OF_DAY)){
+			return (minutes<tp.getStartTime().get(Calendar.MINUTE));
 		}
-		else if(date.getHours() < tp.getStartTime().getHours()){
+		else if(hour < tp.getStartTime().get(Calendar.HOUR_OF_DAY)){
 			return true;
 		}
 		return false;

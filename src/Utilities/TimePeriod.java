@@ -1,31 +1,34 @@
 package Utilities;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class TimePeriod {
-	private Date startTime;
-	private Date endTime;
+	private Calendar startTime;
+	private Calendar endTime;
 	
-	public TimePeriod(Date start, Date end){
+	public TimePeriod(Calendar start, Calendar end){
 		startTime=start;
 		endTime=end;
 	}
 	
-	public Boolean isContained(Date date){
-		return (startTime.getTime()<= date.getTime() && endTime.getTime()>=date.getTime());
+	public Boolean isContained(Calendar date){
+		return (startTime.getTimeInMillis() <= date.getTimeInMillis() && endTime.getTimeInMillis()>=date.getTimeInMillis());
 	}
 	
 	public Boolean isOverlapped(TimePeriod tp){
-		return tp.getStartTime().getTime() >= getStartTime().getTime() && tp.getStartTime().getTime() < getEndTime().getTime() ||
-                (tp.getEndTime().getTime() > getStartTime().getTime() && tp.getEndTime().getTime() <= getEndTime().getTime());
+		return tp.getStartTime().getTimeInMillis() >= getStartTime().getTimeInMillis() && 
+				tp.getStartTime().getTimeInMillis() < getEndTime().getTimeInMillis() ||
+                (tp.getEndTime().getTimeInMillis() > getStartTime().getTimeInMillis() && 
+                		tp.getEndTime().getTimeInMillis() <= getEndTime().getTimeInMillis());
 		
 	}
 	
-	public Date getStartTime(){
+	public Calendar getStartTime(){
 		return startTime;
 	}
 	
-	public Date getEndTime(){
+	public Calendar getEndTime(){
 		return endTime;
 	}
 }

@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import org.json.JSONArray;
@@ -76,8 +77,10 @@ public class CreateEventBehaviour extends SimpleBehaviour {
 			String start = json.getString("proposalStartTime");
 			String end = json.getString("proposalEndTime");
 			DateFormat df = new SimpleDateFormat();
-			Date startdate = df.parse(start);
-			Date enddate = df.parse(end);
+			Calendar startdate = Calendar.getInstance();
+			startdate.setTime(df.parse(start));
+			Calendar enddate = Calendar.getInstance();
+			enddate.setTime(df.parse(end));
 			TimePeriod proposal = new TimePeriod(startdate, enddate);
 			MyEvent event = new MyEvent(eventname,span,guests,proposal);
 			
