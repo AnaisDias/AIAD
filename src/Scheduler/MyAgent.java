@@ -21,7 +21,7 @@ public class MyAgent extends Agent {
 
 	private static final long serialVersionUID = 1L;
 	private boolean ready = false;
-	public ArrayList<AID> neighbors = new ArrayList<AID>();
+	public ObservableList<AID> neighbors = FXCollections.observableArrayList();
 	public  ObservableList<AID> allAgents = FXCollections.observableArrayList();
 	public ObservableList<AID> readyAgents = FXCollections.observableArrayList();
 	public ObservableList<MyEvent> events = FXCollections.observableArrayList();

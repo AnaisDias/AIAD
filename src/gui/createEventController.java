@@ -82,7 +82,7 @@ public class createEventController {
 			}
 		}
 		agentsToInviteList.setItems(allAgentsShow);*/
-		agentsToInviteList.setItems(agent.allAgents);
+		agentsToInviteList.setItems(agent.neighbors);
 
 		for(int i=0;i<61;i++){
 			span_minutes.getItems().add(i);
