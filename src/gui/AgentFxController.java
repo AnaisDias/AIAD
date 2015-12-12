@@ -2,6 +2,7 @@ package gui;
 
 import Scheduler.MyAgent;
 import Scheduler.MyEvent;
+import jade.core.AID;
 import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
@@ -10,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.stage.Stage;
 import javafx.stage.Stage;
 
@@ -17,8 +19,13 @@ public class AgentFxController{
 
 	@FXML
     public ListView<MyEvent> eventsAccepted;
+	
+	@FXML
+	public ListView<MyEvent> eventsInvited;
+	
 	AgentContainer agentsContainer;	
 	AgentController agentController;
+
 	MyAgent agent;
 	public AgentFxController(String agentName, AgentContainer agentsContainer) {
 		this.agentsContainer = agentsContainer;
@@ -29,6 +36,7 @@ public class AgentFxController{
 		} catch (StaleProxyException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			((Stage) eventsInvited.getScene().getWindow()).close();
 		}
 	}
 
@@ -39,7 +47,7 @@ public class AgentFxController{
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("template/createEvent.fxml"));
 				loader.setController(new createEventController(this.agent));
 	            Stage stage = new Stage();
-	            stage.setTitle("Schedule an even with uSchedule");
+	            stage.setTitle(agent.getLocalName() + ": Schedule an even with uSchedule");
 	            Scene scene = new Scene(loader.load());
 	            stage.setScene(scene);
 	            
@@ -72,10 +80,25 @@ public class AgentFxController{
 	@FXML
 	protected void initialize() {
 		
+		eventsAccepted.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+		eventsInvited.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		eventsAccepted.setItems(agent.events);
+		eventsInvited.setItems(agent.invitations);
 	}
 
-
+	@FXML
+	void acceptEvents(){
+		
+		for (MyEvent ev : eventsInvited.getSelectionModel().getSelectedItems()) {
+			agent.acceptInvitation(ev);
+			
+		}
+		
+	}
+	@FXML
+	void ready(){
+		agent.sendReady();
+	}
 	public void stop() {
 		try {
 			agentController.kill();

@@ -22,11 +22,15 @@ public class MainController {
 	@FXML
 	void handleStartAgentAction(ActionEvent event) {
 		try {
+			if(agentName.getText().isEmpty()){
+				return;
+			}
+			
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("template/agentView.fxml"));
 			loader.setController(new AgentFxController(agentName.getText(), agentsContainer));
 
 			Stage stage = new Stage();
-			stage.setTitle("Agent view");
+			stage.setTitle("Agent " + agentName +"view");
 			Scene scene = new Scene(loader.load());
 			stage.setScene(scene);
 			stage.show();

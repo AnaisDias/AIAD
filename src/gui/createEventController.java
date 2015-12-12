@@ -1,48 +1,26 @@
 package gui;
 
-import javafx.application.Application;
-import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.*;
-import javafx.stage.Stage;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.HBoxBuilder;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
-import javafx.beans.value.*;
-import java.awt.Choice;
-import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Random;
-import java.util.Vector;
-import java.util.regex.Pattern;
 
 import Scheduler.MyAgent;
 import Scheduler.MyEvent;
 import Utilities.TimePeriod;
 import jade.core.AID;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 public class createEventController {
 
@@ -82,7 +60,7 @@ public class createEventController {
 	MyAgent agent;
 	public createEventController(MyAgent agent) {
 		this.agent= agent;
-		
+
 	}
 
 	@FXML
@@ -93,16 +71,19 @@ public class createEventController {
 	
 	@FXML
 	protected void initialize() {
-	
+
 		allAgentsShow= FXCollections.observableArrayList();
 		agentsToInviteList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-		for (AID agent_forlist : agent.allAgents) {
+
+		
+		/*for (AID agent_forlist : agent.allAgents) {
 			if(!agent_forlist.equals(agent.getAID())){
 		        allAgentsShow.add(agent_forlist);
 			}
 		}
-		agentsToInviteList.setItems(allAgentsShow);
-		
+		agentsToInviteList.setItems(allAgentsShow);*/
+		agentsToInviteList.setItems(agent.allAgents);
+
 		for(int i=0;i<61;i++){
 			span_minutes.getItems().add(i);
 			time_from_minutes.getItems().add(i);
@@ -155,5 +136,8 @@ public class createEventController {
 		MyEvent event = new MyEvent(name.getText(), span, invitedAgents, period);
 		System.out.println(event.getName());
 		System.out.println(event.getSpan());
+		agent.sendInvitations(event);
+	    ((Stage) name.getScene().getWindow()).close();
+
 	}
 }
