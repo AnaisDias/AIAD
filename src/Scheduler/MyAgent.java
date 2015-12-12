@@ -197,5 +197,9 @@ public class MyAgent extends Agent {
 			}
             System.out.println(getAID().getName() + ":  bye");
     }
+	public void solutionReady() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

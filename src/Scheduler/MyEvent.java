@@ -17,6 +17,7 @@ public class MyEvent {
 	public TimePeriod dateProposal;
 	public ArrayList<TimePeriod> possibilities;
 	public TimePeriod agreedTimePeriod;
+	public int agreedCost;
 	public ArrayList<Constraint> constraints;
 	
 	
@@ -70,7 +71,13 @@ public class MyEvent {
 	public void setAgreedTimePeriod(TimePeriod agreedTimePeriod) {
 		this.agreedTimePeriod = agreedTimePeriod;
 	}
+	public int getAgreedCost() {
+		return agreedCost;
+	}
 
+	public void setAgreedCost(int agreedCost) {
+		this.agreedCost = agreedCost;
+	}
 	public ArrayList<Constraint> getConstraints() {
 		return constraints;
 	}

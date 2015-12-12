@@ -1,5 +1,6 @@
 package Behaviours;
 
+import java.io.StringReader;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,8 +17,10 @@ import Scheduler.MyEvent;
 import Utilities.TimePeriod;
 import jade.core.AID;
 import jade.core.behaviours.SimpleBehaviour;
+import jade.lang.acl.ACLCodec.CodecException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import jade.lang.acl.StringACLCodec;
 
 public class CreateEventBehaviour extends SimpleBehaviour {
 	private static final long serialVersionUID = 1L;
@@ -72,7 +75,9 @@ public class CreateEventBehaviour extends SimpleBehaviour {
 			JSONArray eventguests = json.getJSONArray("guests");
 			ArrayList<AID> guests = new ArrayList<AID>();
 			for(int i=0; i<eventguests.length();i++){
-				guests.add(new AID(eventguests.getString(i),true));
+				StringACLCodec codec = new StringACLCodec(new StringReader(eventguests.getString(i)), null);
+				AID agn=codec.decodeAID();
+				guests.add(agn);
 			}
 			String start = json.getString("proposalStartTime");
 			String end = json.getString("proposalEndTime");
@@ -87,7 +92,7 @@ public class CreateEventBehaviour extends SimpleBehaviour {
 			((MyAgent) myAgent).invitations.add(event);
 			((MyAgent) myAgent).setReady(false);
 			System.out.println("Agent invited to event " + eventname);
-		} catch (JSONException | ParseException e) {
+		} catch (JSONException | ParseException | CodecException e) {
 			e.printStackTrace();
 		}
 	}
