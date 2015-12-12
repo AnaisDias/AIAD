@@ -16,22 +16,32 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.HBoxBuilder;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-
+import javafx.beans.value.*;
+import java.awt.Choice;
 import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 import java.util.Vector;
 import java.util.regex.Pattern;
 
 import Scheduler.MyAgent;
+import Scheduler.MyEvent;
+import Utilities.TimePeriod;
 import jade.core.AID;
 
 public class createEventController {
@@ -42,13 +52,41 @@ public class createEventController {
 	@FXML
     private TextField name;
 	
+	@FXML
+    private DatePicker date_from;
+	
+	@FXML
+    private DatePicker date_to;
+	
+	@FXML
+    private ChoiceBox<Integer> time_from_hours;
+	
+	@FXML
+    private ChoiceBox<Integer> time_from_minutes;
+	
+	@FXML
+    private ChoiceBox<Integer> time_to_hours;
+	
+	@FXML
+    private ChoiceBox<Integer> time_to_minutes;
+	
+	@FXML
+    private TextField span_hours;
+	
+	@FXML
+    private ChoiceBox<Integer> span_minutes;
+	
+	private ArrayList<AID> invitedAgents;
+	private  ObservableList<AID> allAgentsShow;
+	
 	MyAgent agent;
 	public createEventController(MyAgent agent) {
 		this.agent= agent;
+		
 	}
 
 	@FXML
-    void inviteAgents(ActionEvent event) {
+    void invitedAgents(ActionEvent event) {
 		
 		
 	}
@@ -56,6 +94,66 @@ public class createEventController {
 	@FXML
 	protected void initialize() {
 	
-		agentsToInviteList.setItems(agent.allAgents);
+		allAgentsShow= FXCollections.observableArrayList();
+		agentsToInviteList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+		for (AID agent_forlist : agent.allAgents) {
+			if(!agent_forlist.equals(agent.getAID())){
+		        allAgentsShow.add(agent_forlist);
+			}
+		}
+		agentsToInviteList.setItems(allAgentsShow);
+		
+		for(int i=0;i<61;i++){
+			span_minutes.getItems().add(i);
+			time_from_minutes.getItems().add(i);
+			time_to_minutes.getItems().add(i);
+		}
+		for(int i=0;i<24;i++){
+			time_from_hours.getItems().add(i);
+			time_to_hours.getItems().add(i);
+		}
+	}
+	
+	@FXML
+	void createEvent(){
+		System.out.println("create event button clicked");
+		invitedAgents= new ArrayList<AID>();
+			
+		for (AID aid : agentsToInviteList.getSelectionModel().getSelectedItems()) {
+			invitedAgents.add(aid);
+			
+		}
+		
+		for (AID aid : invitedAgents) {
+			System.out.println("Invited : " +aid.getName());
+		}
+		
+		Calendar cal_start = Calendar.getInstance();
+		Calendar cal_end = Calendar.getInstance();
+		
+		LocalDate init_LocDate = date_from.getValue();
+		Instant ini_instant = Instant.from(init_LocDate.atStartOfDay(ZoneId.systemDefault()));
+		Date ini_date = Date.from(ini_instant);
+		
+		LocalDate end_LocDate = date_to.getValue();
+		Instant end_instant = Instant.from(end_LocDate.atStartOfDay(ZoneId.systemDefault()));
+		Date end_date = Date.from(end_instant);
+		
+		
+		cal_start.setTime(ini_date);
+		cal_end.setTime(end_date);
+		
+		cal_start.set(Calendar.HOUR,time_from_hours.getValue());
+		cal_start.set(Calendar.MINUTE,time_from_minutes.getValue());
+		cal_end.set(Calendar.HOUR,time_to_hours.getValue());
+		cal_end.set(Calendar.MINUTE,time_to_minutes.getValue());
+		
+		TimePeriod period=new TimePeriod(cal_start,cal_end);
+		
+		long span=Integer.parseInt(span_hours.getText())*60 +span_minutes.getValue();
+		
+		MyEvent event = new MyEvent(name.getText(), span, invitedAgents, period);
+		System.out.println(event.getName());
+		System.out.println(event.getSpan());
 	}
 }
