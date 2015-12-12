@@ -30,7 +30,7 @@ public class MainController {
 			loader.setController(new AgentFxController(agentName.getText(), agentsContainer));
 
 			Stage stage = new Stage();
-			stage.setTitle("Agent " + agentName +"view");
+			stage.setTitle("Agent " + agentName.getText()+"view");
 			Scene scene = new Scene(loader.load());
 			stage.setScene(scene);
 			stage.show();

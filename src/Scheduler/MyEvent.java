@@ -26,6 +26,9 @@ public class MyEvent {
 		this.guests = guests;
 		this.dateProposal=proposal;
 		this.possibilities=new ArrayList<TimePeriod>();
+		
+		//pus a inicializar
+		this.constraints = new ArrayList<Constraint>();
 	}
 
 	public String getName() {

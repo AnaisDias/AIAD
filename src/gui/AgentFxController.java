@@ -1,5 +1,7 @@
 package gui;
 
+import java.io.IOException;
+
 import Scheduler.MyAgent;
 import Scheduler.MyEvent;
 import jade.core.AID;
@@ -87,11 +89,19 @@ public class AgentFxController{
 	}
 
 	@FXML
-	void acceptEvents(){
+	void acceptEvents() throws IOException{
 		
 		for (MyEvent ev : eventsInvited.getSelectionModel().getSelectedItems()) {
 			agent.acceptInvitation(ev);
-			
+
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("template/acceptedEvent.fxml"));
+			loader.setController(new acceptedEventController(this.agent,ev));
+            Stage stage = new Stage();
+            stage.setTitle(ev.getName());
+            Scene scene = new Scene(loader.load());
+            stage.setScene(scene);
+            
+            stage.show();
 		}
 		
 	}

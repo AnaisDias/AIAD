@@ -28,37 +28,37 @@
             <Font size="19.0" />
          </font>
       </Label>
-      <DatePicker id="from_date" layoutX="86.0" layoutY="156.0" prefHeight="25.0" prefWidth="90.0" />
-      <DatePicker id="to_date" layoutX="86.0" layoutY="203.0" prefHeight="25.0" prefWidth="90.0" />
-      <ChoiceBox id="from_hours" layoutX="200.0" layoutY="157.0" prefHeight="25.0" prefWidth="55.0" />
+      <DatePicker fx:id="from_date" layoutX="86.0" layoutY="156.0" prefHeight="25.0" prefWidth="90.0" />
+      <DatePicker fx:id="to_date" layoutX="86.0" layoutY="203.0" prefHeight="25.0" prefWidth="90.0" />
+      <ChoiceBox fx:id="from_hours" layoutX="200.0" layoutY="157.0" prefHeight="25.0" prefWidth="55.0" />
       <Label layoutX="261.0" layoutY="157.0" text=":">
          <font>
             <Font size="19.0" />
          </font>
       </Label>
-      <ChoiceBox id="from_minutes" layoutX="275.0" layoutY="157.0" prefHeight="25.0" prefWidth="55.0" />
-      <ChoiceBox id="to_minutes" layoutX="275.0" layoutY="204.0" prefHeight="25.0" prefWidth="55.0" />
-      <ChoiceBox id="to_hours" layoutX="200.0" layoutY="204.0" prefHeight="25.0" prefWidth="55.0" />
+      <ChoiceBox fx:id="from_minutes" layoutX="275.0" layoutY="157.0" prefHeight="25.0" prefWidth="55.0" />
+      <ChoiceBox fx:id="to_minutes" layoutX="275.0" layoutY="204.0" prefHeight="25.0" prefWidth="55.0" />
+      <ChoiceBox fx:id="to_hours" layoutX="200.0" layoutY="204.0" prefHeight="25.0" prefWidth="55.0" />
       <Label layoutX="261.0" layoutY="204.0" text=":">
          <font>
             <Font size="19.0" />
          </font>
       </Label>
-      <Button layoutX="100.0" layoutY="271.0" mnemonicParsing="false" text="Send time interval">
+      <Button layoutX="100.0" layoutY="271.0" mnemonicParsing="false" text="Send time interval" onAction="#intervalButton" >
          <font>
             <Font name="Ubuntu" size="21.0" />
          </font>
       </Button>
       <Separator layoutX="361.0" layoutY="129.0" orientation="VERTICAL" prefHeight="200.0" />
-      <DatePicker id="date" layoutX="444.0" layoutY="157.0" prefHeight="25.0" prefWidth="90.0" />
-      <ChoiceBox id="hour" layoutX="424.0" layoutY="201.0" prefHeight="25.0" prefWidth="55.0" />
+      <DatePicker fx:id="date" layoutX="444.0" layoutY="157.0" prefHeight="25.0" prefWidth="90.0" />
+      <ChoiceBox fx:id="hour" layoutX="424.0" layoutY="201.0" prefHeight="25.0" prefWidth="55.0" />
       <Label layoutX="487.0" layoutY="201.0" text=":">
          <font>
             <Font size="19.0" />
          </font>
       </Label>
-      <ChoiceBox id="minute" layoutX="500.0" layoutY="201.0" prefHeight="25.0" prefWidth="55.0" />
-      <Button layoutX="431.0" layoutY="271.0" mnemonicParsing="false" text="Send time">
+      <ChoiceBox fx:id="minute" layoutX="500.0" layoutY="201.0" prefHeight="25.0" prefWidth="55.0" />
+      <Button layoutX="431.0" layoutY="271.0" mnemonicParsing="false" text="Send time"  onAction="#specificButton">
          <font>
             <Font name="Ubuntu" size="21.0" />
          </font>
