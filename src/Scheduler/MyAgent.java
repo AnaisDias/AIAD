@@ -6,6 +6,8 @@ import java.util.HashMap;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import Behaviours.ABTBehaviour;
+import Behaviours.CreateEventBehaviour;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.domain.DFService;
@@ -21,7 +23,7 @@ public class MyAgent extends Agent {
 
 	private static final long serialVersionUID = 1L;
 	private boolean ready = false;
-	public ObservableList<AID> neighbors = FXCollections.observableArrayList();
+	public ArrayList<AID> neighbors = new ArrayList<AID>();
 	public  ObservableList<AID> allAgents = FXCollections.observableArrayList();
 	public ObservableList<AID> readyAgents = FXCollections.observableArrayList();
 	public ObservableList<MyEvent> events = FXCollections.observableArrayList();
@@ -96,6 +98,7 @@ public class MyAgent extends Agent {
 			}
 		});
 		allAgents.add(getAID());
+		addBehaviour(new CreateEventBehaviour());
 	}
 	
 	private void addAgent(AID agent){
@@ -197,8 +200,13 @@ public class MyAgent extends Agent {
 			}
             System.out.println(getAID().getName() + ":  bye");
     }
+	
+	//precisa de ser chamado pela interface quando todos os agentes estiverem ready (readyAgents contains all allAgents)
+	public void startAlgorithm(){
+		addBehaviour(new ABTBehaviour());
+	}
 	public void solutionReady() {
-		// TODO Auto-generated method stub
+		// código para avisar interface que algoritmo acabou
 		
 	}
 	
