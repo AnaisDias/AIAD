@@ -1,6 +1,9 @@
 package Scheduler;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
 
 import Constraints.Constraint;
 import Utilities.TimePeriod;
@@ -12,7 +15,7 @@ public class MyEvent {
 	public ArrayList<AID> guests;
 
 	public TimePeriod dateProposal;
-	public ArrayList<TimePeriod> possibilites;
+	public ArrayList<TimePeriod> possibilities;
 	public TimePeriod agreedTimePeriod;
 	public ArrayList<Constraint> constraints;
 	
@@ -22,6 +25,7 @@ public class MyEvent {
 		this.setSpan(span);
 		this.guests = guests;
 		this.dateProposal=proposal;
+		this.possibilities=new ArrayList<TimePeriod>();
 	}
 
 	public String getName() {
@@ -76,10 +80,34 @@ public class MyEvent {
 		constraints.add(con);
 	}
 	
-	public void calculatePossibilites(){
+	public void calculatePossibilities(){
+		possibilities = new ArrayList<TimePeriod>();
+		long startTime = dateProposal.getStartTime().getTimeInMillis();
+		long currentTime = dateProposal.getStartTime().getTimeInMillis() + (span*60*1000);
+		Calendar st = Calendar.getInstance();
+		Calendar ct = Calendar.getInstance();
 		
+		//cria possibilidades de 30 em 30 minutos dentro das datas permitidas
+		while(currentTime<dateProposal.getEndTime().getTimeInMillis()){
+			st.setTime(new Date(startTime));
+			ct.setTime(new Date(currentTime));
+			TimePeriod newpropo = new TimePeriod(st, ct);
+			possibilities.add(newpropo);
+			startTime += 30*1000; //supostamente 30 min em millis
+			currentTime += 30*1000;
+		}
+		
+		Collections.reverse(possibilities);
 	}
 	
+	public ArrayList<TimePeriod> getPossibilities() {
+		return possibilities;
+	}
+
+	public void setPossibilities(ArrayList<TimePeriod> possibilities) {
+		this.possibilities = possibilities;
+	}
+
 	public int getSolutionCost(TimePeriod tp){
 		int cost = 0;
 
