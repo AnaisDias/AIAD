@@ -124,8 +124,8 @@ public class MyAgent extends Agent {
 	
 	public void sendInvitations(MyEvent event){
 		try {
-			invitations.add(event);
-
+			event.guests.add(getAID());
+			
 			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 			msg.setConversationId("event-creation");
 
@@ -177,7 +177,12 @@ public class MyAgent extends Agent {
 		msg.setContent("DECLINE-"+ event.getName());
 		event.getGuests().forEach(msg::addReceiver);
 		
+		
 		send(msg);
+		
+		if(invitations.isEmpty()){
+			sendReady();
+		}
 	}
 	
 	public void sendReady(){
@@ -218,12 +223,10 @@ public class MyAgent extends Agent {
             System.out.println(getAID().getName() + ":  bye");
     }
 	
-	//precisa de ser chamado pela interface quando todos os agentes estiverem ready (readyAgents contains all allAgents)
 	public void startAlgorithm(){
 		addBehaviour(new ABTBehaviour());
 	}
 	public void solutionReady() {
-		// c�digo para avisar interface que algoritmo acabou
 		System.out.println("called ");
 		if(MyAgent.solutionBlock){
 			return;

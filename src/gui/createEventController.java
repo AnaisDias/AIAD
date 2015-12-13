@@ -6,6 +6,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TreeSet;
 
 import Scheduler.MyAgent;
 import Scheduler.MyEvent;
@@ -54,7 +55,7 @@ public class createEventController {
 	@FXML
     private ChoiceBox<Integer> span_minutes;
 	
-	private ArrayList<AID> invitedAgents;
+	private TreeSet<AID> invitedAgents;
 	private  ObservableList<AID> allAgentsShow;
 	
 	MyAgent agent;
@@ -100,7 +101,7 @@ public class createEventController {
 	@FXML
 	void createEvent(){
 		System.out.println("create event button clicked");
-		invitedAgents= new ArrayList<AID>();
+		invitedAgents= new TreeSet<AID>();
 			
 		for (AID aid : agentsToInviteList.getSelectionModel().getSelectedItems()) {
 			invitedAgents.add(aid);
