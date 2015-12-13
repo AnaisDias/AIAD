@@ -46,7 +46,11 @@ public class TimePeriod {
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         try {
-			startTime.setTime(sdf.parse(parts[0]));
+        	Date st = sdf.parse(parts[0]);
+        	System.out.println(st.toString());
+			startTime = Calendar.getInstance();
+			endTime = Calendar.getInstance();
+			startTime.setTime(st);
 			endTime.setTime(sdf.parse(parts[1]));
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -57,8 +61,8 @@ public class TimePeriod {
     public String toString(boolean simple) {
         Calendar sd = Calendar.getInstance();
         Calendar ed = Calendar.getInstance();
-        sd.setTimeInMillis(startTime.getTimeInMillis()*1000);
-        ed.setTimeInMillis(endTime.getTimeInMillis()*1000);
+        sd.setTimeInMillis(startTime.getTimeInMillis());
+        ed.setTimeInMillis(endTime.getTimeInMillis());
         if (simple) {
             return startTime + "," + endTime;
         } else {
