@@ -8,7 +8,7 @@ public class solutionController {
 	Label solution;
 	@FXML
 	Label cost;
-	//adicioanr aprametros qe or preciso pelo cosntrutor
+	//adicioanr aprametros qe or preciso pelo s
 	public solutionController(){
 		
 	}

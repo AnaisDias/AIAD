@@ -37,7 +37,6 @@ public class MyAgent extends Agent {
 	public ObservableList<MyEvent> invitations = FXCollections.observableArrayList();
 	public HashMap<String, AID> agentsMap = new HashMap<String, AID>();
 	public SimpleBooleanProperty allReady= new SimpleBooleanProperty(false);
-	private static boolean solutionBlock=false;
 
 	public MyAgent() {
 	}
@@ -228,16 +227,13 @@ public class MyAgent extends Agent {
 	}
 	public void solutionReady() {
 		System.out.println("called ");
-		if(MyAgent.solutionBlock){
-			return;
-		}
-		MyAgent.solutionBlock=true;
+
 		Platform.runLater(new Runnable() {
 			
 			@Override
 			public void run() {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("../gui/template/solution.fxml"));
-				loader.setController(new solutionController());
+				loader.setController(new solutionController(events,getAID().getName()));
 				Stage stage = new Stage();
 				stage.setTitle("treta");
 				Scene scene;
