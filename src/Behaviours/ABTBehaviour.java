@@ -161,8 +161,7 @@ public class ABTBehaviour extends SimpleBehaviour{
 			
 			JSONObject json = new JSONObject();
 			try {
-				json.put("start", asgn.sol.getStartTime().toString());
-				json.put("end", asgn.sol.getEndTime().toString());
+				json.put("proposal", asgn.sol.toString());
 				json.put("agent", asgn.agent);
 			} catch (JSONException e) {
 				e.printStackTrace();
@@ -176,7 +175,7 @@ public class ABTBehaviour extends SimpleBehaviour{
 				msg.addReceiver(r);
 			}
 		
-            msg.setContent("OK?:" + event.getName() + "-" + jsonmsg);
+            msg.setContent("OK?-" + event.getName() + "-" + jsonmsg);
             msg.setConversationId("schedule-event");
             agent.send(msg);
             
@@ -185,18 +184,14 @@ public class ABTBehaviour extends SimpleBehaviour{
 		private void sendNoGood(NoGood ng, AID ag) {
 			JSONObject json = new JSONObject();
 			try {
-				json.put("start", ng.tp.getStartTime().toString());
-				json.put("end", ng.tp.getEndTime().toString());
+				json.put("proposal", ng.tp.toString());
 				json.put("register", ng.register);
 				json.put("cost", ng.cost);
 				json.put("accurate", ng.accurate);
 				
 				JSONObject context = new JSONObject();
 				for(Map.Entry<AID, TimePeriod> con : ng.context.entrySet()){
-					JSONObject time = new JSONObject();
-					time.put("start", con.getValue().getStartTime().toString());
-					time.put("end", con.getValue().getEndTime().toString());
-					context.put(con.getKey().toString(), time);
+					context.put(con.getKey().toString(), con.getValue().toString());
 				}
 				
 				json.put("context", context);
@@ -209,7 +204,7 @@ public class ABTBehaviour extends SimpleBehaviour{
 			
 			ACLMessage msg = new ACLMessage(ACLMessage.REJECT_PROPOSAL);
 			msg.addReceiver(ag);
-            msg.setContent("NOGOOD:" + event.getName() + "-" + jsonmsg);
+            msg.setContent("NOGOOD-" + event.getName() + "-" + jsonmsg);
             msg.setConversationId("schedule-event");
             
             agent.send(msg);
@@ -220,8 +215,7 @@ public class ABTBehaviour extends SimpleBehaviour{
 			
 			JSONObject json = new JSONObject();
 			try {
-				json.put("start", assigned.sol.getStartTime().toString());
-				json.put("end", assigned.sol.getEndTime().toString());
+				json.put("proposal", assigned.sol.toString());
 				json.put("agent", assigned.agent);
 			} catch (JSONException e) {
 				e.printStackTrace();
@@ -231,7 +225,7 @@ public class ABTBehaviour extends SimpleBehaviour{
 
             ACLMessage msg = new ACLMessage(ACLMessage.PROPOSE);
             msg.addReceiver(ag);
-            msg.setContent("LINK:" + event.getName() + "-" + jsonmsg);
+            msg.setContent("LINK-" + event.getName() + "-" + jsonmsg);
             msg.setConversationId("schedule-align");
             agent.send(msg);
 
@@ -248,34 +242,27 @@ public class ABTBehaviour extends SimpleBehaviour{
             for (AID a : abt.inferiorAgents) {
                 msg.addReceiver(a);
             }
-            msg.setContent("TERMINATE:" + event.getName() + "-" + cost);
+            msg.setContent("TERMINATE-" + event.getName() + "-" + cost);
             msg.setConversationId("schedule-event");
             agent.send(msg);
 			
 		}
 
 		public void handleOK(ACLMessage msg) {
-			String[] sm = msg.toString().split(":");
-			sm = sm[1].split("-");
+			String[] sm = msg.toString().split("-");
 			
 			try {
 				Assignment asgn = new Assignment();
-				JSONObject json = new JSONObject(sm[1]);
+				JSONObject json = new JSONObject(sm[2]);
 				
 				StringACLCodec codec = new StringACLCodec(new StringReader(json.get("agent").toString()), null);
 
 				asgn.agent=codec.decodeAID();
 				
-				String start = json.getString("start");
-				String end = json.getString("end");
-				DateFormat df = new SimpleDateFormat();
-				Calendar startdate = Calendar.getInstance();
-				startdate.setTime(df.parse(start));
-				Calendar enddate = Calendar.getInstance();
-				enddate.setTime(df.parse(end));
-				TimePeriod proposal = new TimePeriod(startdate, enddate);
+				String proposal = json.getString("proposal");
+				TimePeriod prop = new TimePeriod(proposal);
 				
-				asgn.sol = proposal;
+				asgn.sol = prop;
 				
 				for(NoGood ng : abt.noGoodStore){
 					for(Map.Entry<AID, TimePeriod> cont : ng.context.entrySet()){
@@ -289,7 +276,7 @@ public class ABTBehaviour extends SimpleBehaviour{
 				abt.agentView.put(asgn.agent, asgn.sol);
 				adjustValue();
 				
-			} catch (CodecException | JSONException | ParseException e) {
+			} catch (CodecException | JSONException e) {
 				e.printStackTrace();
 			}
 			
@@ -297,12 +284,11 @@ public class ABTBehaviour extends SimpleBehaviour{
 		}
 
 		public void handleNoGood(ACLMessage msg) {
-			String[] sm = msg.toString().split(":");
-			sm = sm[1].split("-");
+			String[] sm = msg.toString().split("-");
 			
 			try {
 				NoGood ng = new NoGood();
-				JSONObject json = new JSONObject(sm[1]);
+				JSONObject json = new JSONObject(sm[2]);
 				
 				ng.accurate = json.getBoolean("accurate");
 				
@@ -313,19 +299,12 @@ public class ABTBehaviour extends SimpleBehaviour{
 		        while (itr.hasNext()) {
 		        	String key = itr.next();
 		        	
-		        	JSONObject time = json.getJSONObject("time");
-		        	String start = time.getString("start");
-					String end = time.getString("end");
-					DateFormat df = new SimpleDateFormat();
-					Calendar startdate = Calendar.getInstance();
-					startdate.setTime(df.parse(start));
-					Calendar enddate = Calendar.getInstance();
-					enddate.setTime(df.parse(end));
-					TimePeriod proposal = new TimePeriod(startdate, enddate);
+		        	String proposal = context.getString(key);
+					TimePeriod prop = new TimePeriod(proposal);
 					
 					StringACLCodec codec = new StringACLCodec(new StringReader(key), null);
 
-					con.put(codec.decodeAID(), proposal);
+					con.put(codec.decodeAID(), prop);
 				}
 		        
 		        ng.context= con;
@@ -338,16 +317,10 @@ public class ABTBehaviour extends SimpleBehaviour{
 		        	ng.register.add(codec.decodeAID());
 		        }
 		        
-				String start = json.getString("start");
-				String end = json.getString("end");
-				DateFormat df = new SimpleDateFormat();
-				Calendar startdate = Calendar.getInstance();
-				startdate.setTime(df.parse(start));
-				Calendar enddate = Calendar.getInstance();
-				enddate.setTime(df.parse(end));
-				TimePeriod proposal = new TimePeriod(startdate, enddate);
+				String proposal = json.getString("proposal");
+				TimePeriod prop = new TimePeriod(proposal);
 				
-				ng.tp = proposal;
+				ng.tp = prop;
 				
 				
 				for (Map.Entry<AID, TimePeriod> cont : ng.context.entrySet()) {
@@ -370,7 +343,7 @@ public class ABTBehaviour extends SimpleBehaviour{
 	            abt.noGoodStore.add(ng);
 	            adjustValue();
 				
-			} catch (CodecException | JSONException | ParseException e) {
+			} catch (CodecException | JSONException  e) {
 				e.printStackTrace();
 			}
 			
@@ -379,44 +352,36 @@ public class ABTBehaviour extends SimpleBehaviour{
 		
 
 		public void handleLink(ACLMessage msg) {
-			String[] sm = msg.toString().split(":");
-			sm = sm[1].split("-");
+			String[] sm = msg.toString().split("-");
 
 
 			Assignment asgn = new Assignment();
 			JSONObject json;
 			try {
-				json = new JSONObject(sm[1]);
+				json = new JSONObject(sm[2]);
 
 				StringACLCodec codec = new StringACLCodec(new StringReader(json.get("agent").toString()), null);
 
 				asgn.agent=codec.decodeAID();
 
-				String start = json.getString("start");
-				String end = json.getString("end");
-				DateFormat df = new SimpleDateFormat();
-				Calendar startdate = Calendar.getInstance();
-				startdate.setTime(df.parse(start));
-				Calendar enddate = Calendar.getInstance();
-				enddate.setTime(df.parse(end));
-				TimePeriod proposal = new TimePeriod(startdate, enddate);
+				String proposal = json.getString("proposal");
+				TimePeriod prop = new TimePeriod(proposal);
 
-				asgn.sol = proposal;
+				asgn.sol = prop;
 				
 				abt.inferiorAgents.add(asgn.agent);
 				sendOK(asgn);
 
-			} catch (JSONException | CodecException | ParseException e) {
+			} catch (JSONException | CodecException e) {
 				e.printStackTrace();
 			}
 
 		}
 
 		public void handleTerminate(ACLMessage msg) {
-			String[] sm = msg.toString().split(":");
-			sm = sm[1].split("-");
+			String[] sm = msg.toString().split("-");
 			
-			int cost = Integer.parseInt(sm[1]);
+			int cost = Integer.parseInt(sm[2]);
 			
 			terminate(cost);
 			
@@ -472,12 +437,11 @@ public class ABTBehaviour extends SimpleBehaviour{
 
 		if (msg != null) {
 			String stringmsg = msg.toString();
-			String[] sm = stringmsg.split(":");
-			if (sm.length == 2) {
-				String[] sm2 = sm[1].split("-");
+			String[] sm = stringmsg.split("2");
+			if (sm.length == 3) {
 				ArrayList<VirtualAgent> receivers = new ArrayList<VirtualAgent>();
 				for(VirtualAgent va : virtualAgents){
-					if(sm2[0].equals(va.event.getName())) receivers.add(va);
+					if(sm[1].equals(va.event.getName())) receivers.add(va);
 				}
 				switch (sm[0]) {
 				case "OK?":
