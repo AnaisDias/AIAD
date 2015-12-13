@@ -35,9 +35,9 @@ public class CreateEventBehaviour extends SimpleBehaviour {
 
 		if (msg != null) {
 			String stmsg = msg.getContent();
-			String stringmsg = stmsg.toString();
-			String[] sm = stringmsg.split(":");
-			System.out.println(stringmsg);
+			//String stringmsg = stmsg.toString();
+			String[] sm = stmsg.split("-");
+			System.out.println(sm[1]);
 			if (sm.length == 2) {
 				switch (sm[0]) {
 				case "INVITE":
@@ -67,34 +67,30 @@ public class CreateEventBehaviour extends SimpleBehaviour {
 	}
 
 	private void handleInvite(ACLMessage msg) {
-		String stringmsg = msg.toString();
-		String[] sm = stringmsg.split(":");
+		
+		String stringmsg = msg.getContent();
+		String[] sm = stringmsg.split("-");
+		System.out.print(sm[1]);
 		try {
 			JSONObject json = new JSONObject(sm[1]);
 			String eventname = json.get("name").toString();
-			String stspan = json.getString("span").toString();
-			long span = Long.parseLong(stspan,10);
+			int span = json.getInt("span");
 			JSONArray eventguests = json.getJSONArray("guests");
 			ArrayList<AID> guests = new ArrayList<AID>();
 			for(int i=0; i<eventguests.length();i++){
-				StringACLCodec codec = new StringACLCodec(new StringReader(eventguests.getString(i)), null);
-				AID agn=codec.decodeAID();
+				System.out.print(eventguests.getString(i));
+				AID agn = ((MyAgent)myAgent).agentsMap.get(eventguests.getString(i));
 				guests.add(agn);
 			}
-			String start = json.getString("proposalStartTime");
-			String end = json.getString("proposalEndTime");
-			DateFormat df = new SimpleDateFormat();
-			Calendar startdate = Calendar.getInstance();
-			startdate.setTime(df.parse(start));
-			Calendar enddate = Calendar.getInstance();
-			enddate.setTime(df.parse(end));
-			TimePeriod proposal = new TimePeriod(startdate, enddate);
+			String time = json.getString("proposal");
+			
+			TimePeriod proposal = new TimePeriod(time);
 			MyEvent event = new MyEvent(eventname,span,guests,proposal);
 			
 			((MyAgent) myAgent).invitations.add(event);
 			((MyAgent) myAgent).setReady(false);
 			System.out.println("Agent invited to event " + eventname);
-		} catch (JSONException | ParseException | CodecException e) {
+		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 	}
@@ -103,7 +99,7 @@ public class CreateEventBehaviour extends SimpleBehaviour {
 		boolean added = false;
 		if(!msg.getSender().equals(((MyAgent)myAgent).getAID())){
 			String stmsg = msg.getContent();
-			String[] sm = stmsg.split(":");
+			String[] sm = stmsg.split("-");
 			for(MyEvent ev: ((MyAgent)myAgent).events){
 				if(ev.getName().equals(sm[1])){
 					ev.guests.add(msg.getSender());
@@ -124,7 +120,7 @@ public class CreateEventBehaviour extends SimpleBehaviour {
 		}
 		else {
 			String stmsg = msg.getContent();
-			String[] sm = stmsg.split(":");
+			String[] sm = stmsg.split("-");
 			System.out.println("Agent successfully joined event " + sm[1]);
 		}
 
@@ -133,7 +129,7 @@ public class CreateEventBehaviour extends SimpleBehaviour {
 	private void handleDecline(ACLMessage msg) {
 		boolean removed = false;
 		String stmsg = msg.getContent();
-		String[] sm = stmsg.split(":");
+		String[] sm = stmsg.split("-");
 		for(MyEvent ev: ((MyAgent)myAgent).events){
 			if(ev.getName().equals(sm[1])){
 				ev.guests.remove(msg.getSender());

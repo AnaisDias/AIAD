@@ -1,5 +1,7 @@
 package Utilities;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -31,4 +33,37 @@ public class TimePeriod {
 	public Calendar getEndTime(){
 		return endTime;
 	}
+	
+	@Override
+    public String toString() {
+        return toString(false);
+    }
+	
+	public TimePeriod(String string) {
+        String[] parts = string.split(",");
+        if (parts.length != 2)
+            throw new IllegalArgumentException();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        try {
+			startTime.setTime(sdf.parse(parts[0]));
+			endTime.setTime(sdf.parse(parts[1]));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+        
+    }
+	
+    public String toString(boolean simple) {
+        Calendar sd = Calendar.getInstance();
+        Calendar ed = Calendar.getInstance();
+        sd.setTimeInMillis(startTime.getTimeInMillis()*1000);
+        ed.setTimeInMillis(endTime.getTimeInMillis()*1000);
+        if (simple) {
+            return startTime + "," + endTime;
+        } else {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            return (dateFormat.format(sd.getTime())) + ", " + (dateFormat.format(ed.getTime()));
+        }
+    }
 }

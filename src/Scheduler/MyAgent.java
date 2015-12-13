@@ -2,6 +2,7 @@ package Scheduler;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,6 +34,7 @@ public class MyAgent extends Agent {
 	public ObservableList<AID> readyAgents = FXCollections.observableArrayList();
 	public ObservableList<MyEvent> events = FXCollections.observableArrayList();
 	public ObservableList<MyEvent> invitations = FXCollections.observableArrayList();
+	public HashMap<String, AID> agentsMap = new HashMap<String, AID>();
 	private static boolean solutionBlock=false;
 
 	public MyAgent() {
@@ -104,12 +106,14 @@ public class MyAgent extends Agent {
 			}
 		});
 		allAgents.add(getAID());
+		agentsMap.put(getName(), getAID());
 		addBehaviour(new CreateEventBehaviour());
 	}
 	
 	private void addAgent(AID agent){
 		allAgents.add(agent);
 		neighbors.add(agent);
+		agentsMap.put(agent.getName(),agent);
 	}
 	
 	private void removeAgent(AID agent){
@@ -133,10 +137,9 @@ public class MyAgent extends Agent {
 			}
 			json.put("guests", guestnames);
 
-			json.put("proposalStartTime", event.getDateProposal().getStartTime().toString());
-			json.put("proposalEndTime", event.getDateProposal().getEndTime().toString());
+			json.put("proposal", event.getDateProposal().toString());
 			
-			msg.setContent("INVITE:" + json);
+			msg.setContent("INVITE-" + json);
 			send(msg);
 
 		} catch (JSONException e) {
@@ -152,7 +155,7 @@ public class MyAgent extends Agent {
 		
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 		msg.setConversationId("event-creation");
-		msg.setContent("ACCEPT:" + event.getName());
+		msg.setContent("ACCEPT-" + event.getName());
 		event.getGuests().forEach(msg::addReceiver);
 		send(msg);
 		
@@ -164,7 +167,7 @@ public class MyAgent extends Agent {
 		
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 		msg.setConversationId("event-creation");
-		msg.setContent("DECLINE:"+ event.getName());
+		msg.setContent("DECLINE-"+ event.getName());
 		event.getGuests().forEach(msg::addReceiver);
 		
 		send(msg);
@@ -174,7 +177,7 @@ public class MyAgent extends Agent {
 		if(ready){
 			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 			msg.setConversationId("event-creation");
-			msg.setContent("READY: ");
+			msg.setContent("READY-");
 			allAgents.forEach(msg::addReceiver);
 			send(msg);
 		}
@@ -184,7 +187,7 @@ public class MyAgent extends Agent {
 		if(!ready){
 			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 			msg.setConversationId("event-creation");
-			msg.setContent("HALT: ");
+			msg.setContent("HALT-");
 			allAgents.forEach(msg::addReceiver);
 			send(msg);
 		}
