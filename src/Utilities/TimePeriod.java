@@ -14,6 +14,25 @@ public class TimePeriod {
 		endTime=end;
 	}
 	
+	public TimePeriod(String string) {
+        String[] parts = string.split(",");
+        if (parts.length != 2)
+            throw new IllegalArgumentException();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        try {
+        	Date st = sdf.parse(parts[0]);
+        	System.out.println(st.toString());
+			startTime = Calendar.getInstance();
+			endTime = Calendar.getInstance();
+			startTime.setTime(st);
+			endTime.setTime(sdf.parse(parts[1]));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+        
+    }
+	
 	public Boolean isContained(Calendar date){
 		return (startTime.getTimeInMillis() <= date.getTimeInMillis() && endTime.getTimeInMillis()>=date.getTimeInMillis());
 	}
@@ -39,24 +58,7 @@ public class TimePeriod {
         return toString(false);
     }
 	
-	public TimePeriod(String string) {
-        String[] parts = string.split(",");
-        if (parts.length != 2)
-            throw new IllegalArgumentException();
-
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        try {
-        	Date st = sdf.parse(parts[0]);
-        	System.out.println(st.toString());
-			startTime = Calendar.getInstance();
-			endTime = Calendar.getInstance();
-			startTime.setTime(st);
-			endTime.setTime(sdf.parse(parts[1]));
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-        
-    }
+	
 	
     public String toString(boolean simple) {
         Calendar sd = Calendar.getInstance();
@@ -69,5 +71,17 @@ public class TimePeriod {
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
             return (dateFormat.format(sd.getTime())) + ", " + (dateFormat.format(ed.getTime()));
         }
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof TimePeriod))
+            return false;
+
+        if (obj == this)
+            return true;
+
+        TimePeriod tp = (TimePeriod) obj;
+        return startTime == tp.startTime && endTime == tp.endTime;
     }
 }

@@ -9,8 +9,6 @@ import org.json.JSONObject;
 
 import Behaviours.ABTBehaviour;
 import Behaviours.CreateEventBehaviour;
-import gui.AgentFxController;
-import gui.Main;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.domain.DFService;
@@ -19,6 +17,7 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.proto.SubscriptionInitiator;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -232,20 +231,29 @@ public class MyAgent extends Agent {
 			return;
 		}
 		MyAgent.solutionBlock=true;
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("../gui/template/init.fxml"));
+		Platform.runLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("../gui/template/init.fxml"));
 
-		Stage stage = new Stage();
-		stage.setTitle("treta");
-		Scene scene;
-		try {
-			scene = new Scene(loader.load());
-			stage.setScene(scene);
+				Stage stage = new Stage();
+				stage.setTitle("treta");
+				Scene scene;
+				try {
+					scene = new Scene(loader.load());
+					stage.setScene(scene);
 
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		stage.show();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				stage.show();
+				
+			}
+		});
+
+		
 	}
 	
 }
