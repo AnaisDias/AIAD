@@ -16,20 +16,10 @@ import Scheduler.MyEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 public class acceptedEventController {
 
-	@FXML
-	Label timespan;
-	
-	@FXML
-	Label duration;
-	
-	@FXML
-	Label error;
-	
 	@FXML
 	DatePicker from_date;
 
@@ -82,26 +72,12 @@ public class acceptedEventController {
 			hour.getItems().add(i);
 		}
 		
-		String[] split=(""+ev.getDateProposal()).split(",");
-		String sp="From "+split[0] +" to "+split[1];
-		timespan.setText(sp);
-		String dur="Duration: "+ev.getSpan() +" minutes.";
-		duration.setText(dur);
+		
 		
 	}
 	
 	@FXML
 	public void intervalButton(){
-		
-		if(from_date.getValue() == null 
-				|| to_date.getValue() == null 
-				|| from_hours.getValue() == null 
-				|| from_minutes.getValue() == null 
-				|| to_hours.getValue() == null 
-				|| to_minutes.getValue() == null  ){
-			error.setText("Please fill all the requested inputs");
-			return ;
-		}
 		LocalDate end_LocDate = from_date.getValue();
 		Instant end_instant = Instant.from(end_LocDate.atStartOfDay(ZoneId.systemDefault()));
 		Date end_date = Date.from(end_instant);
@@ -110,6 +86,7 @@ public class acceptedEventController {
 		
 		
 		ev.addConstraint(new AfterDateConstraint(cal_end));
+		System.out.println("After date constraint: "+ cal_end.getTime());
 		
 		LocalDate start_LocDate = to_date.getValue();
 		Instant start_instant = Instant.from(start_LocDate.atStartOfDay(ZoneId.systemDefault()));
@@ -119,11 +96,15 @@ public class acceptedEventController {
 		
 		
 		ev.addConstraint(new BeforeDateConstraint(cal_start));
+		System.out.println("Before date constraint: "+ cal_start.getTime());
 		
 		
 		ev.addConstraint(new AfterHourConstraint(from_hours.getValue(), from_minutes.getValue()));
+		System.out.println("After hour constraint: "+ from_hours.getValue() + " " +from_minutes.getValue());
 
 		ev.addConstraint(new BeforeHourConstraint(to_hours.getValue(), to_minutes.getValue()));
+		System.out.println("Before hour constraint: "+ to_hours.getValue() + " " +to_minutes.getValue());
+
 		System.out.println("interval button constraint created");
 		agent.acceptInvitation(ev);
 		 ((Stage) from_hours.getScene().getWindow()).close();
@@ -131,15 +112,6 @@ public class acceptedEventController {
 	}
 	@FXML
 	public void specificButton(){
-		
-		if(date.getValue() == null 
-				|| hour.getValue() == null 
-				|| minute.getValue() == null )
-		{
-			error.setText("Please fill all the requested inputs");
-			return ;
-		}
-		
 		LocalDate LocDate = date.getValue();
 		Instant instant = Instant.from(LocDate.atStartOfDay(ZoneId.systemDefault()));
 		Date date = Date.from(instant);

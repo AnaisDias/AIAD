@@ -15,8 +15,8 @@ public class BeforeDateConstraint implements Constraint {
 	@Override
 	public boolean satisfiedBy(TimePeriod tp) {
 	
-		return (date.getTimeInMillis() > tp.getStartTime().getTimeInMillis() && 
-				date.getTimeInMillis() > tp.getEndTime().getTimeInMillis());
+		return (date.getTimeInMillis() >= tp.getStartTime().getTimeInMillis() && 
+				date.getTimeInMillis() >= tp.getEndTime().getTimeInMillis());
 	}
 
 }

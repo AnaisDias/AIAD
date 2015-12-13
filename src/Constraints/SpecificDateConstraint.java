@@ -17,8 +17,10 @@ public class SpecificDateConstraint implements Constraint {
 		return date.get(Calendar.DAY_OF_MONTH) == tp.getStartTime().get(Calendar.DAY_OF_MONTH)&&
 				date.get(Calendar.MONTH)==tp.getStartTime().get(Calendar.MONTH) &&
 				date.get(Calendar.YEAR)==tp.getStartTime().get(Calendar.YEAR) &&
-				date.get(Calendar.HOUR_OF_DAY) == tp.getStartTime().get(Calendar.HOUR_OF_DAY) &&
-				date.get(Calendar.MINUTE) == tp.getStartTime().get(Calendar.MINUTE);
+				date.get(Calendar.HOUR_OF_DAY) >= tp.getStartTime().get(Calendar.HOUR_OF_DAY) &&
+				date.get(Calendar.HOUR_OF_DAY) <= tp.getEndTime().get(Calendar.HOUR_OF_DAY) &&
+				date.get(Calendar.MINUTE) >= tp.getStartTime().get(Calendar.MINUTE) &&
+				date.get(Calendar.MINUTE) <= tp.getEndTime().get(Calendar.MINUTE);
 	}
 
 }

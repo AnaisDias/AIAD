@@ -33,10 +33,11 @@ public class ABTBehaviour extends SimpleBehaviour{
 	private ArrayList<VirtualAgent> virtualAgents = new ArrayList<VirtualAgent>();
 	
 	public static class VirtualAgent {
-		private ABT abt = new ABT();
+		
 		private MyAgent agent;
 		private MyEvent event;
-		private boolean done;
+		private ABT abt = new ABT();
+		private boolean agentdone = false;
 		private ABTBehaviour abtbeh;
 		
 		public VirtualAgent(MyAgent agent, MyEvent event, ABTBehaviour abtBeh){
@@ -45,7 +46,8 @@ public class ABTBehaviour extends SimpleBehaviour{
 			this.event=event;
 			this.abtbeh = abtBeh;
 			
-			abt.inferiorAgents = new ArrayList<AID>();
+			
+			abt.inferiorAgents = new TreeSet<AID>();
 			
 			for(AID a: event.guests){
 				if(a.compareTo(agent.getAID())>0) abt.inferiorAgents.add(a);
@@ -78,9 +80,13 @@ public class ABTBehaviour extends SimpleBehaviour{
 				register.add(agent.getAID());
 				
 				for(AID ag : abt.agentView.keySet()){
+					
 					if(!abt.agentView.get(ag).equals(tp)){
+						System.out.println(tp);
+						System.out.println(agent.getAID().getName() + " increased cost by 1000" + abt.agentView);
 						delta+=1000;
 					}
+					else System.out.println("they agreeeeeee!!!!!");
 				}
 
 				for(NoGood ng : abt.noGoodStore){
@@ -95,6 +101,7 @@ public class ABTBehaviour extends SimpleBehaviour{
 					if(event.getName().compareTo(ag.event.getName())>0 
 							&& ag.abt.assigned.sol != null
 							&& ag.abt.assigned.sol.isOverlapped(tp)){
+						System.out.println(agent.getAID().getName() + " increased cost by 1000 because other events");
 						delta += 1000;
 					}
 				}
@@ -110,7 +117,7 @@ public class ABTBehaviour extends SimpleBehaviour{
 			}
 			
 			if(abt.cost !=0 || abt.accurate){
-				if(agent.getAID().equals(event.guests.first())){
+				if(agent.getAID().getName().equals(event.guests.first().getName())){
 					System.out.println(agent.getAID().getName() + " going to terminate");
 					terminate(abt.cost);
 					return;
@@ -127,7 +134,7 @@ public class ABTBehaviour extends SimpleBehaviour{
 					ng.register=abt.register;
 					ng.accurate=abt.accurate;
 					ng.cost=abt.cost;
-					ng.context = abt.agentView;
+					ng.context = new HashMap<AID,TimePeriod>(abt.agentView);
 					ng.context.remove(assign.agent);
 					
 					System.out.println(agent.getAID().getName() + " is gonna send nogood");
@@ -151,13 +158,17 @@ public class ABTBehaviour extends SimpleBehaviour{
 			event.setAgreedTimePeriod(abt.assigned.sol);
 			
 			sendTerminate(cost);
+			agentdone = true;
 			
-			done = true;
+			abtbeh.done = true;
 			for(VirtualAgent ag : abtbeh.virtualAgents){
-				done = done && ag.done;
+				abtbeh.done = abtbeh.done && ag.agentdone;
+				
 			}
 			
-			if(done) agent.solutionReady();
+			if(abtbeh.done) {
+				agent.solutionReady();
+			}
 			
 		}
 
@@ -185,6 +196,27 @@ public class ABTBehaviour extends SimpleBehaviour{
             agent.send(msg);
             
             
+		}
+		
+		private void sendOK(Assignment asgn, AID ag) {
+			JSONObject json = new JSONObject();
+			try {
+				json.put("proposal", asgn.sol.toString());
+				json.put("agent", asgn.agent.getName());
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			
+			String jsonmsg = json.toString();
+			
+			ACLMessage msg = new ACLMessage(ACLMessage.PROPOSE);
+			
+			msg.addReceiver(ag);
+		
+            msg.setContent("OK?-" + event.getName() + "-" + jsonmsg);
+            msg.setConversationId("schedule-event");
+            agent.send(msg);
+			
 		}
 		
 		private void sendNoGood(NoGood ng, AID ag) {
@@ -236,7 +268,7 @@ public class ABTBehaviour extends SimpleBehaviour{
             ACLMessage msg = new ACLMessage(ACLMessage.PROPOSE);
             msg.addReceiver(ag);
             msg.setContent("LINK-" + event.getName() + "-" + jsonmsg);
-            msg.setConversationId("schedule-align");
+            msg.setConversationId("schedule-event");
             agent.send(msg);
 
 			
@@ -267,7 +299,7 @@ public class ABTBehaviour extends SimpleBehaviour{
 				JSONObject json = new JSONObject(sm[2]);
 				
 				
-				AID agn = agent.agentsMap.get(json.getString("agent").toString());
+				AID agn = agent.agentsMap.get(json.getString("agent"));
 
 				asgn.agent=agn;
 				
@@ -277,11 +309,12 @@ public class ABTBehaviour extends SimpleBehaviour{
 				asgn.sol = prop;
 				
 				
-				
-				for(NoGood ng : abt.noGoodStore){
+				Iterator<NoGood> i = abt.noGoodStore.iterator();
+				while(i.hasNext()){
+					NoGood ng = i.next();
 					for(Map.Entry<AID, TimePeriod> cont : ng.context.entrySet()){
-						if(cont.getKey().equals(asgn.agent) && !cont.getValue().equals(asgn.sol)){
-							abt.noGoodStore.remove(cont);
+						if(cont.getKey().getName().equals(asgn.agent.getName()) && !cont.getValue().equals(asgn.sol)){
+							i.remove();
 							break;
 						}
 					}
@@ -304,7 +337,7 @@ public class ABTBehaviour extends SimpleBehaviour{
 			try {
 				NoGood ng = new NoGood();
 				JSONObject json = new JSONObject(sm[2]);
-				
+				ng.context= new HashMap<AID, TimePeriod>();
 				ng.accurate = json.getBoolean("accurate");
 				
 				HashMap<AID, TimePeriod> con = new HashMap<AID, TimePeriod>();
@@ -319,15 +352,14 @@ public class ABTBehaviour extends SimpleBehaviour{
 					
 					AID agn = agent.agentsMap.get(key);
 
-					con.put(agn, prop);
+					ng.context.put(agn, prop);
 				}
 		        
-		        ng.context= con;
 		        ng.cost = json.getInt("cost");
 		        ng.register = new TreeSet<AID>();
 		        
 		        JSONArray reg = json.getJSONArray("register");
-		        for(int i=0; i<reg.length(); i++){
+		        for(int i=0; i<reg.length(); ++i){
 		        	AID agn = agent.agentsMap.get(reg.getString(i));
 		        	ng.register.add(agn);
 		        }
@@ -348,12 +380,14 @@ public class ABTBehaviour extends SimpleBehaviour{
 	                        return;
 	                }
 	            }
-
-	            for (NoGood oldng : abt.noGoodStore) {
-	                if (oldng.tp.equals(ng.tp) && ng.register.containsAll(oldng.register)) {
-	                    abt.noGoodStore.remove(oldng);
+				
+				Iterator<NoGood> i = abt.noGoodStore.iterator();
+				while(i.hasNext()){
+					NoGood oldng = i.next();
+					if (oldng.tp.equals(ng.tp) && ng.register.containsAll(oldng.register)) {
+	                    i.remove();
 	                }
-	            }
+				}
 
 	            abt.noGoodStore.add(ng);
 	            adjustValue();
@@ -385,13 +419,15 @@ public class ABTBehaviour extends SimpleBehaviour{
 				asgn.sol = prop;
 				
 				abt.inferiorAgents.add(asgn.agent);
-				sendOK(asgn);
+				sendOK(asgn, asgn.agent);
 
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 
 		}
+
+		
 
 		public void handleTerminate(ACLMessage msg) {
 			
@@ -409,7 +445,7 @@ public class ABTBehaviour extends SimpleBehaviour{
 	
 	public static class ABT {
 		public Assignment assigned;
-		public ArrayList<AID> inferiorAgents;
+		public TreeSet<AID> inferiorAgents;
 		public ArrayList<TimePeriod> domain;
 		public HashMap<AID, TimePeriod> agentView;
 		public ArrayList<NoGood> noGoodStore;
@@ -420,8 +456,8 @@ public class ABTBehaviour extends SimpleBehaviour{
 	}
 	
 	public static class Assignment {
-		public TimePeriod sol;
 		public AID agent;
+		public TimePeriod sol;
 	}
 	
 	public static class NoGood {
@@ -439,18 +475,19 @@ public class ABTBehaviour extends SimpleBehaviour{
         if (agent.events.isEmpty()) {
         	System.out.println("ABT: Agent has no events");
             done = true;
+            agent.solutionReady();
             return;
         }
 
         for (MyEvent event : agent.events) {
-        	System.out.println(event);
+        	System.out.println("Virtual Agent added: "+ agent.getAID().getName() + " " + event);
             virtualAgents.add(new VirtualAgent(agent, event, this));
-            System.out.println("Virtual Agent added: "+ agent.getAID().getName() + " " + event);
-        }
+            }
     }
 
 	@Override
 	public void action() {
+		if(done) return;
 		ACLMessage temp = new ACLMessage(ACLMessage.INFORM);
 		temp.setConversationId("schedule-event");
 		MessageTemplate msgtemp = MessageTemplate.MatchConversationId(temp.getConversationId());
@@ -496,7 +533,7 @@ public class ABTBehaviour extends SimpleBehaviour{
 
 		}
 		else{
-			block();
+			//block();
 		}
 	}
 

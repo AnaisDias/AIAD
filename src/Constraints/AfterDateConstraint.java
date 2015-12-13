@@ -15,7 +15,7 @@ public class AfterDateConstraint implements Constraint {
 	public boolean satisfiedBy(TimePeriod tp) {
 		
 		tp.getStartTime();
-		return (date.get(Calendar.DATE)<tp.getStartTime().get(Calendar.DATE));
+		return (date.getTimeInMillis()<=tp.getStartTime().getTimeInMillis());
 	}
 
 }

@@ -18,7 +18,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
@@ -56,9 +55,6 @@ public class createEventController {
 	@FXML
     private ChoiceBox<Integer> span_minutes;
 	
-	@FXML
-    private Label error;
-	
 	private TreeSet<AID> invitedAgents;
 	private  ObservableList<AID> allAgentsShow;
 	
@@ -80,17 +76,16 @@ public class createEventController {
 		allAgentsShow= FXCollections.observableArrayList();
 		agentsToInviteList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-	
+		
 		/*for (AID agent_forlist : agent.allAgents) {
 			if(!agent_forlist.equals(agent.getAID())){
 		        allAgentsShow.add(agent_forlist);
 			}
 		}
 		agentsToInviteList.setItems(allAgentsShow);*/
-		
 		agentsToInviteList.setItems(agent.neighbors);
 
-		for(int i=0;i<60;i++){
+		for(int i=0;i<61;i++){
 			span_minutes.getItems().add(i);
 			time_from_minutes.getItems().add(i);
 			time_to_minutes.getItems().add(i);
@@ -105,21 +100,7 @@ public class createEventController {
 	
 	@FXML
 	void createEvent(){
-		
-		
 		System.out.println("create event button clicked");
-		
-		if(name.getText()==null 
-				|| date_from.getValue() == null 
-				|| date_to.getValue() == null 
-				|| time_from_hours.getValue() == null 
-				|| time_from_minutes.getValue() == null 
-				|| time_to_hours.getValue() == null 
-				|| time_to_minutes.getValue() == null  ){
-			error.setText("Please fill all the requested inputs");
-			return ;
-		}
-		
 		invitedAgents= new TreeSet<AID>();
 			
 		for (AID aid : agentsToInviteList.getSelectionModel().getSelectedItems()) {
@@ -150,10 +131,7 @@ public class createEventController {
 		cal_start.set(Calendar.MINUTE,time_from_minutes.getValue());
 		cal_end.set(Calendar.HOUR,time_to_hours.getValue());
 		cal_end.set(Calendar.MINUTE,time_to_minutes.getValue());
-		if(cal_start.after(cal_end)){
-			error.setText("Error: Invalid time interval. The FROM date has to be bigger that the TO date.");
-			return ;
-		}
+		
 		TimePeriod period=new TimePeriod(cal_start,cal_end);
 		
 		long span=Integer.parseInt(span_hours.getText())*60 +span_minutes.getValue();

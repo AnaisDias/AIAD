@@ -82,6 +82,6 @@ public class TimePeriod {
             return true;
 
         TimePeriod tp = (TimePeriod) obj;
-        return startTime == tp.startTime && endTime == tp.endTime;
+        return startTime.getTimeInMillis() == tp.startTime.getTimeInMillis() && endTime.getTimeInMillis() == tp.endTime.getTimeInMillis();
     }
 }
