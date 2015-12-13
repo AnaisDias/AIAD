@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.TreeSet;
 
 import Constraints.Constraint;
 import Utilities.TimePeriod;
@@ -12,7 +13,7 @@ import jade.core.AID;
 public class MyEvent {
 	private String name;
 	private long span; //in minutes
-	public ArrayList<AID> guests;
+	public TreeSet<AID> guests;
 
 	public TimePeriod dateProposal;
 	public ArrayList<TimePeriod> possibilities;
@@ -21,13 +22,14 @@ public class MyEvent {
 	public ArrayList<Constraint> constraints;
 	
 	
-	public MyEvent(String name, long span, ArrayList<AID> guests, TimePeriod proposal){
+	public MyEvent(String name, long span, TreeSet<AID> guests, TimePeriod proposal){
 		this.setName(name);
 		this.setSpan(span);
 		this.guests = guests;
 		this.dateProposal=proposal;
 		this.constraints = new ArrayList<Constraint>();
 		this.possibilities=new ArrayList<TimePeriod>();
+		calculatePossibilities();
 	}
 
 	public String getName() {
@@ -46,11 +48,11 @@ public class MyEvent {
 		this.span = span;
 	}
 	
-	public ArrayList<AID> getGuests() {
+	public TreeSet<AID> getGuests() {
 		return guests;
 	}
 	
-	public void setGuests(ArrayList<AID> guests) {
+	public void setGuests(TreeSet<AID> guests) {
 		this.guests = guests;
 	}
 
@@ -93,20 +95,23 @@ public class MyEvent {
 		possibilities = new ArrayList<TimePeriod>();
 		long startTime = dateProposal.getStartTime().getTimeInMillis();
 		long currentTime = dateProposal.getStartTime().getTimeInMillis() + (span*60*1000);
-		Calendar st = Calendar.getInstance();
-		Calendar ct = Calendar.getInstance();
+		
 		
 		//cria possibilidades de 30 em 30 minutos dentro das datas permitidas
 		while(currentTime<dateProposal.getEndTime().getTimeInMillis()){
+			//System.out.println(st.getTime());
+			Calendar st = Calendar.getInstance();
+			Calendar ct = Calendar.getInstance();
 			st.setTime(new Date(startTime));
 			ct.setTime(new Date(currentTime));
 			TimePeriod newpropo = new TimePeriod(st, ct);
-			possibilities.add(newpropo);
-			startTime += 30*1000; //supostamente 30 min em millis
-			currentTime += 30*1000;
+			possibilities.add(new TimePeriod(st, ct));
+			startTime += 3600*1000; //supostamente 60 min em millis
+			currentTime += 3600*1000;
 		}
 		
 		Collections.reverse(possibilities);
+		
 	}
 	
 	public ArrayList<TimePeriod> getPossibilities() {

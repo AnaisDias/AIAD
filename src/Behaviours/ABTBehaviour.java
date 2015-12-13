@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.TreeSet;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,7 +48,7 @@ public class ABTBehaviour extends SimpleBehaviour{
 			abt.inferiorAgents = new ArrayList<AID>();
 			
 			for(AID a: event.guests){
-				if(a.compareTo(agent.getAID())<0) abt.inferiorAgents.add(a);
+				if(a.compareTo(agent.getAID())>0) abt.inferiorAgents.add(a);
 			}
 			
 			abt.assigned = new Assignment();
@@ -58,7 +59,7 @@ public class ABTBehaviour extends SimpleBehaviour{
 			abt.noGoodStore=new ArrayList<NoGood>();
 			abt.cost=0;
 			abt.accurate=true;
-			abt.register = new ArrayList<AID>();
+			abt.register = new TreeSet<AID>();
 			
 			adjustValue();
 		}
@@ -71,9 +72,10 @@ public class ABTBehaviour extends SimpleBehaviour{
 			for(TimePeriod tp : abt.domain){
 				int lowerbound = 0;
 				int delta = event.getSolutionCost(tp);
+				System.out.println("delta: " + delta);
 				boolean accurate = true;
 				
-				ArrayList<AID> register = new ArrayList<AID>();
+				TreeSet<AID> register = new TreeSet<AID>();
 				register.add(agent.getAID());
 				
 				for(AID ag : abt.agentView.keySet()){
@@ -99,7 +101,6 @@ public class ABTBehaviour extends SimpleBehaviour{
 				}
 				
 				accurate = accurate && register.containsAll(abt.inferiorAgents);
-				
 				if(lowerbound + delta <= abt.cost){
 					abt.assigned.sol = tp;
 					abt.cost = lowerbound + delta;
@@ -109,7 +110,7 @@ public class ABTBehaviour extends SimpleBehaviour{
 			}
 			
 			if(abt.cost !=0 || abt.accurate){
-				if(agent.getAID().equals(event.guests.get(0))){
+				if(agent.getAID().equals(event.guests.first())){
 					terminate(abt.cost);
 					return;
 				}
@@ -156,7 +157,6 @@ public class ABTBehaviour extends SimpleBehaviour{
 		}
 
 		
-
 		private void sendOK(Assignment asgn) {
 			
 			JSONObject json = new JSONObject();
@@ -249,7 +249,8 @@ public class ABTBehaviour extends SimpleBehaviour{
 		}
 
 		public void handleOK(ACLMessage msg) {
-			String[] sm = msg.toString().split("-");
+			String[] sm = msg.getContent().split("-");
+			System.out.println("Received OK? from "+msg.getSender().getName());
 			
 			try {
 				Assignment asgn = new Assignment();
@@ -263,6 +264,8 @@ public class ABTBehaviour extends SimpleBehaviour{
 				TimePeriod prop = new TimePeriod(proposal);
 				
 				asgn.sol = prop;
+				
+				
 				
 				for(NoGood ng : abt.noGoodStore){
 					for(Map.Entry<AID, TimePeriod> cont : ng.context.entrySet()){
@@ -284,7 +287,8 @@ public class ABTBehaviour extends SimpleBehaviour{
 		}
 
 		public void handleNoGood(ACLMessage msg) {
-			String[] sm = msg.toString().split("-");
+			String[] sm = msg.getContent().split("-");
+			System.out.println("Received NOGOOD from "+msg.getSender().getName());
 			
 			try {
 				NoGood ng = new NoGood();
@@ -309,7 +313,7 @@ public class ABTBehaviour extends SimpleBehaviour{
 		        
 		        ng.context= con;
 		        ng.cost = json.getInt("cost");
-		        ng.register = new ArrayList<AID>();
+		        ng.register = new TreeSet<AID>();
 		        
 		        JSONArray reg = json.getJSONArray("register");
 		        for(int i=0; i<reg.length(); i++){
@@ -352,8 +356,8 @@ public class ABTBehaviour extends SimpleBehaviour{
 		
 
 		public void handleLink(ACLMessage msg) {
-			String[] sm = msg.toString().split("-");
-
+			String[] sm = msg.getContent().split("-");
+			System.out.println("Received LINK from "+msg.getSender().getName());
 
 			Assignment asgn = new Assignment();
 			JSONObject json;
@@ -379,7 +383,9 @@ public class ABTBehaviour extends SimpleBehaviour{
 		}
 
 		public void handleTerminate(ACLMessage msg) {
-			String[] sm = msg.toString().split("-");
+			
+			String[] sm = msg.getContent().split("-");
+			System.out.println("Received TERMINATE from "+msg.getSender().getName());
 			
 			int cost = Integer.parseInt(sm[2]);
 			
@@ -398,7 +404,7 @@ public class ABTBehaviour extends SimpleBehaviour{
 		public ArrayList<NoGood> noGoodStore;
 		public int cost;
 		public boolean accurate;
-		public ArrayList<AID> register;
+		public TreeSet<AID> register;
 		
 	}
 	
@@ -411,20 +417,23 @@ public class ABTBehaviour extends SimpleBehaviour{
 		public TimePeriod tp;
 		public int cost;
 		public HashMap<AID, TimePeriod> context;
-		public ArrayList<AID> register;
+		public TreeSet<AID> register;
 		public boolean accurate;
 	}
 	
 	@Override
     public void onStart() {
+		System.out.println("Starting ABT");
         agent = (MyAgent) myAgent;
         if (agent.events.isEmpty()) {
+        	System.out.println("ABT: Agent has no events");
             done = true;
             return;
         }
 
         for (MyEvent event : agent.events) {
             virtualAgents.add(new VirtualAgent(agent, event, this));
+            System.out.println("Virtual Agent added: "+ agent.getAID().getName() + " " + event);
         }
     }
 
@@ -436,8 +445,9 @@ public class ABTBehaviour extends SimpleBehaviour{
 		ACLMessage msg = myAgent.receive(msgtemp);
 
 		if (msg != null) {
-			String stringmsg = msg.toString();
-			String[] sm = stringmsg.split("2");
+			String stringmsg = msg.getContent();
+			
+			String[] sm = stringmsg.split("-");
 			if (sm.length == 3) {
 				ArrayList<VirtualAgent> receivers = new ArrayList<VirtualAgent>();
 				for(VirtualAgent va : virtualAgents){

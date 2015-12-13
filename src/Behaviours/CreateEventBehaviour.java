@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TreeSet;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -76,7 +77,7 @@ public class CreateEventBehaviour extends SimpleBehaviour {
 			String eventname = json.get("name").toString();
 			int span = json.getInt("span");
 			JSONArray eventguests = json.getJSONArray("guests");
-			ArrayList<AID> guests = new ArrayList<AID>();
+			TreeSet<AID> guests = new TreeSet<AID>();
 			for(int i=0; i<eventguests.length();i++){
 				System.out.print(eventguests.getString(i));
 				AID agn = ((MyAgent)myAgent).agentsMap.get(eventguests.getString(i));
@@ -86,7 +87,7 @@ public class CreateEventBehaviour extends SimpleBehaviour {
 			
 			TimePeriod proposal = new TimePeriod(time);
 			MyEvent event = new MyEvent(eventname,span,guests,proposal);
-			
+			System.out.println(event);
 			((MyAgent) myAgent).invitations.add(event);
 			((MyAgent) myAgent).setReady(false);
 			System.out.println("Agent invited to event " + eventname);
@@ -102,7 +103,7 @@ public class CreateEventBehaviour extends SimpleBehaviour {
 			String[] sm = stmsg.split("-");
 			for(MyEvent ev: ((MyAgent)myAgent).events){
 				if(ev.getName().equals(sm[1])){
-					ev.guests.add(msg.getSender());
+					if(!ev.guests.contains(msg.getSender())) ev.guests.add(msg.getSender());
 					System.out.println(msg.getSender().getName() + " accepted event " + sm[1]);
 					added=true;
 				}
@@ -110,7 +111,7 @@ public class CreateEventBehaviour extends SimpleBehaviour {
 			if(!added){
 				for(MyEvent ev: ((MyAgent)myAgent).invitations){
 					if(ev.getName().equals(sm[1])){
-						ev.guests.add(msg.getSender());
+						if(!ev.guests.contains(msg.getSender())) ev.guests.add(msg.getSender());
 						System.out.println(msg.getSender().getName() + " accepted event " + sm[1]);
 						added=true;
 					}
@@ -121,7 +122,12 @@ public class CreateEventBehaviour extends SimpleBehaviour {
 		else {
 			String stmsg = msg.getContent();
 			String[] sm = stmsg.split("-");
-			System.out.println("Agent successfully joined event " + sm[1]);
+			for(MyEvent ev: ((MyAgent)myAgent).events){
+				if(ev.getName().equals(sm[1])){
+					if(!ev.guests.contains(msg.getSender())) ev.guests.add(msg.getSender());
+				}
+			}
+			System.out.println("Agent " + msg.getSender().getName() + " successfully joined event " + sm[1]);
 		}
 
 	}
@@ -153,8 +159,12 @@ public class CreateEventBehaviour extends SimpleBehaviour {
 		System.out.println(msg.getSender().getName() + " is ready");
 		((MyAgent)myAgent).readyAgents.add(msg.getSender());
 		if(((MyAgent)myAgent).readyAgents.containsAll(((MyAgent)myAgent).allAgents)){
-			((MyAgent)myAgent).allReady = new SimpleBooleanProperty(true);
+			((MyAgent)myAgent).allReady.setValue(true);
 			System.out.println("All agents are ready");
+			for(MyEvent event : ((MyAgent)myAgent).events){
+				System.out.println(event.getGuests());
+			}
+			
 			done=true;
 			
 		}
