@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 import Behaviours.ABTBehaviour;
 import Behaviours.CreateEventBehaviour;
+import gui.solutionController;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.domain.DFService;
@@ -235,8 +236,8 @@ public class MyAgent extends Agent {
 			
 			@Override
 			public void run() {
-				FXMLLoader loader = new FXMLLoader(getClass().getResource("../gui/template/init.fxml"));
-
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("../gui/template/solution.fxml"));
+				loader.setController(new solutionController());
 				Stage stage = new Stage();
 				stage.setTitle("treta");
 				Scene scene;
