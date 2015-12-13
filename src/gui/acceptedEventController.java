@@ -25,6 +25,9 @@ public class acceptedEventController {
 	Label timespan;
 	
 	@FXML
+	Label duration;
+	
+	@FXML
 	DatePicker from_date;
 
 	@FXML
@@ -79,6 +82,8 @@ public class acceptedEventController {
 		String[] split=(""+ev.getDateProposal()).split(",");
 		String sp="From "+split[0] +" to "+split[1];
 		timespan.setText(sp);
+		String dur="Duration: "+ev.getSpan() +" minutes.";
+		duration.setText(dur);
 		
 	}
 	
