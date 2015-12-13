@@ -64,5 +64,6 @@
       </Button>
       <Label fx:id="timespan" layoutX="158.0" layoutY="58.0" prefHeight="15.0" prefWidth="312.0" text="Time span" />
       <Label fx:id="duration" layoutX="163.0" layoutY="80.0" prefHeight="15.0" prefWidth="312.0" text="duration" />
+      <Label fx:id="error" layoutX="31.0" layoutY="345.0" prefHeight="39.0" prefWidth="549.0" textFill="RED" />
    </children>
 </Pane>

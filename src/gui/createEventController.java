@@ -117,7 +117,6 @@ public class createEventController {
 				|| time_to_hours.getValue() == null 
 				|| time_to_minutes.getValue() == null  ){
 			error.setText("Please fill all the requested inputs");
-			System.out.println("soumerda");
 			return ;
 		}
 		

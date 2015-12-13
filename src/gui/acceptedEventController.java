@@ -28,6 +28,9 @@ public class acceptedEventController {
 	Label duration;
 	
 	@FXML
+	Label error;
+	
+	@FXML
 	DatePicker from_date;
 
 	@FXML
@@ -89,6 +92,16 @@ public class acceptedEventController {
 	
 	@FXML
 	public void intervalButton(){
+		
+		if(from_date.getValue() == null 
+				|| to_date.getValue() == null 
+				|| from_hours.getValue() == null 
+				|| from_minutes.getValue() == null 
+				|| to_hours.getValue() == null 
+				|| to_minutes.getValue() == null  ){
+			error.setText("Please fill all the requested inputs");
+			return ;
+		}
 		LocalDate end_LocDate = from_date.getValue();
 		Instant end_instant = Instant.from(end_LocDate.atStartOfDay(ZoneId.systemDefault()));
 		Date end_date = Date.from(end_instant);
@@ -118,6 +131,15 @@ public class acceptedEventController {
 	}
 	@FXML
 	public void specificButton(){
+		
+		if(date.getValue() == null 
+				|| hour.getValue() == null 
+				|| minute.getValue() == null )
+		{
+			error.setText("Please fill all the requested inputs");
+			return ;
+		}
+		
 		LocalDate LocDate = date.getValue();
 		Instant instant = Instant.from(LocDate.atStartOfDay(ZoneId.systemDefault()));
 		Date date = Date.from(instant);
