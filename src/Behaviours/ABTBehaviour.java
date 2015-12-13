@@ -72,14 +72,13 @@ public class ABTBehaviour extends SimpleBehaviour{
 			for(TimePeriod tp : abt.domain){
 				int lowerbound = 0;
 				int delta = event.getSolutionCost(tp);
-				System.out.println("delta: " + delta);
 				boolean accurate = true;
 				
 				TreeSet<AID> register = new TreeSet<AID>();
 				register.add(agent.getAID());
 				
 				for(AID ag : abt.agentView.keySet()){
-					if(abt.agentView.get(ag).equals(tp)){
+					if(!abt.agentView.get(ag).equals(tp)){
 						delta+=1000;
 					}
 				}
@@ -102,6 +101,7 @@ public class ABTBehaviour extends SimpleBehaviour{
 				
 				accurate = accurate && register.containsAll(abt.inferiorAgents);
 				if(lowerbound + delta <= abt.cost){
+					System.out.println(agent.getAID().getName() + " reassigned cost");
 					abt.assigned.sol = tp;
 					abt.cost = lowerbound + delta;
 					abt.accurate=accurate;
@@ -111,16 +111,17 @@ public class ABTBehaviour extends SimpleBehaviour{
 			
 			if(abt.cost !=0 || abt.accurate){
 				if(agent.getAID().equals(event.guests.first())){
+					System.out.println(agent.getAID().getName() + " going to terminate");
 					terminate(abt.cost);
 					return;
 				}
 				
 				if(!abt.agentView.isEmpty()){
-					ArrayList<AID> ags = new ArrayList<AID>(abt.agentView.keySet());
+					TreeSet<AID> ags = new TreeSet<AID>(abt.agentView.keySet());
 					Assignment assign = new Assignment();
 					NoGood ng = new NoGood();
 					
-					assign.agent=ags.get(ags.size()-1);
+					assign.agent=ags.last();
 					assign.sol=abt.agentView.get(assign.agent);
 					ng.tp = assign.sol;
 					ng.register=abt.register;
@@ -129,6 +130,7 @@ public class ABTBehaviour extends SimpleBehaviour{
 					ng.context = abt.agentView;
 					ng.context.remove(assign.agent);
 					
+					System.out.println(agent.getAID().getName() + " is gonna send nogood");
 					sendNoGood(ng, assign.agent);
 					
 				}
@@ -136,8 +138,11 @@ public class ABTBehaviour extends SimpleBehaviour{
 			}
 			
 			if(!abt.assigned.sol.equals(value)){
+				System.out.println(agent.getAID().getName()+ "got here!!");
 				sendOK(abt.assigned);
 			}
+			
+			System.out.println(agent.getAID().getName()+ " ended adjustvalue");
 			
 		}
 
@@ -162,7 +167,7 @@ public class ABTBehaviour extends SimpleBehaviour{
 			JSONObject json = new JSONObject();
 			try {
 				json.put("proposal", asgn.sol.toString());
-				json.put("agent", asgn.agent);
+				json.put("agent", asgn.agent.getName());
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -179,19 +184,24 @@ public class ABTBehaviour extends SimpleBehaviour{
             msg.setConversationId("schedule-event");
             agent.send(msg);
             
+            
 		}
 		
 		private void sendNoGood(NoGood ng, AID ag) {
 			JSONObject json = new JSONObject();
 			try {
 				json.put("proposal", ng.tp.toString());
-				json.put("register", ng.register);
+				ArrayList<String> agentnames = new ArrayList<String>();
+				for(AID a : ng.register){
+					agentnames.add(a.getName());
+				}
+				json.put("register", agentnames);
 				json.put("cost", ng.cost);
 				json.put("accurate", ng.accurate);
 				
 				JSONObject context = new JSONObject();
 				for(Map.Entry<AID, TimePeriod> con : ng.context.entrySet()){
-					context.put(con.getKey().toString(), con.getValue().toString());
+					context.put(con.getKey().getName(), con.getValue().toString());
 				}
 				
 				json.put("context", context);
@@ -216,7 +226,7 @@ public class ABTBehaviour extends SimpleBehaviour{
 			JSONObject json = new JSONObject();
 			try {
 				json.put("proposal", assigned.sol.toString());
-				json.put("agent", assigned.agent);
+				json.put("agent", assigned.agent.getName());
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -256,9 +266,10 @@ public class ABTBehaviour extends SimpleBehaviour{
 				Assignment asgn = new Assignment();
 				JSONObject json = new JSONObject(sm[2]);
 				
-				StringACLCodec codec = new StringACLCodec(new StringReader(json.get("agent").toString()), null);
+				
+				AID agn = agent.agentsMap.get(json.getString("agent").toString());
 
-				asgn.agent=codec.decodeAID();
+				asgn.agent=agn;
 				
 				String proposal = json.getString("proposal");
 				TimePeriod prop = new TimePeriod(proposal);
@@ -279,7 +290,7 @@ public class ABTBehaviour extends SimpleBehaviour{
 				abt.agentView.put(asgn.agent, asgn.sol);
 				adjustValue();
 				
-			} catch (CodecException | JSONException e) {
+			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 			
@@ -306,9 +317,9 @@ public class ABTBehaviour extends SimpleBehaviour{
 		        	String proposal = context.getString(key);
 					TimePeriod prop = new TimePeriod(proposal);
 					
-					StringACLCodec codec = new StringACLCodec(new StringReader(key), null);
+					AID agn = agent.agentsMap.get(key);
 
-					con.put(codec.decodeAID(), prop);
+					con.put(agn, prop);
 				}
 		        
 		        ng.context= con;
@@ -317,8 +328,8 @@ public class ABTBehaviour extends SimpleBehaviour{
 		        
 		        JSONArray reg = json.getJSONArray("register");
 		        for(int i=0; i<reg.length(); i++){
-		        	StringACLCodec codec = new StringACLCodec(new StringReader(reg.getString(i)), null);
-		        	ng.register.add(codec.decodeAID());
+		        	AID agn = agent.agentsMap.get(reg.getString(i));
+		        	ng.register.add(agn);
 		        }
 		        
 				String proposal = json.getString("proposal");
@@ -347,7 +358,7 @@ public class ABTBehaviour extends SimpleBehaviour{
 	            abt.noGoodStore.add(ng);
 	            adjustValue();
 				
-			} catch (CodecException | JSONException  e) {
+			} catch (JSONException  e) {
 				e.printStackTrace();
 			}
 			
@@ -364,9 +375,9 @@ public class ABTBehaviour extends SimpleBehaviour{
 			try {
 				json = new JSONObject(sm[2]);
 
-				StringACLCodec codec = new StringACLCodec(new StringReader(json.get("agent").toString()), null);
+				AID agn = agent.agentsMap.get(json.getString("agent"));
 
-				asgn.agent=codec.decodeAID();
+				asgn.agent=agn;
 
 				String proposal = json.getString("proposal");
 				TimePeriod prop = new TimePeriod(proposal);
@@ -376,7 +387,7 @@ public class ABTBehaviour extends SimpleBehaviour{
 				abt.inferiorAgents.add(asgn.agent);
 				sendOK(asgn);
 
-			} catch (JSONException | CodecException e) {
+			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 
@@ -432,6 +443,7 @@ public class ABTBehaviour extends SimpleBehaviour{
         }
 
         for (MyEvent event : agent.events) {
+        	System.out.println(event);
             virtualAgents.add(new VirtualAgent(agent, event, this));
             System.out.println("Virtual Agent added: "+ agent.getAID().getName() + " " + event);
         }
@@ -448,6 +460,7 @@ public class ABTBehaviour extends SimpleBehaviour{
 			String stringmsg = msg.getContent();
 			
 			String[] sm = stringmsg.split("-");
+			System.out.println(stringmsg);
 			if (sm.length == 3) {
 				ArrayList<VirtualAgent> receivers = new ArrayList<VirtualAgent>();
 				for(VirtualAgent va : virtualAgents){
