@@ -92,7 +92,6 @@ public class AgentFxController{
 	void acceptEvents() throws IOException{
 		
 		for (MyEvent ev : eventsInvited.getSelectionModel().getSelectedItems()) {
-			agent.acceptInvitation(ev);
 
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("template/acceptedEvent.fxml"));
 			loader.setController(new acceptedEventController(this.agent,ev));
@@ -107,6 +106,19 @@ public class AgentFxController{
 	
 		
 	}
+	
+	@FXML
+	void declineEvents() throws IOException{
+		
+		for (MyEvent ev : eventsInvited.getSelectionModel().getSelectedItems()) {
+			agent.declineInvitation(ev);
+			eventsInvited.getItems().remove(ev);
+		}
+		
+	
+		
+	}
+	
 	@FXML
 	void ready(){
 		agent.sendReady();

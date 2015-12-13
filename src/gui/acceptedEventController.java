@@ -101,6 +101,7 @@ public class acceptedEventController {
 
 		ev.addConstraint(new BeforeHourConstraint(to_hours.getValue(), to_minutes.getValue()));
 		System.out.println("interval button constraint created");
+		agent.acceptInvitation(ev);
 		 ((Stage) from_hours.getScene().getWindow()).close();
 		
 	}
@@ -117,7 +118,7 @@ public class acceptedEventController {
 		ev.addConstraint(new SpecificDateConstraint(cal));
 		
 		System.out.println("specific button constraint created");
-
+		agent.acceptInvitation(ev);
 		
 		((Stage) from_hours.getScene().getWindow()).close();
 	}
