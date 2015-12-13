@@ -39,5 +39,10 @@
 			text="Accept" onAction="#acceptEvents"/>
 		<Button cancelButton="true" layoutX="50.0" layoutY="330.0"
 			mnemonicParsing="false" text="Decline" />
+			<Button layoutX="263.0" layoutY="342.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="84.0" text="Ready" onAction="#ready">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Button>
 	</children>
 </Pane>

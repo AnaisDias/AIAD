@@ -108,7 +108,12 @@ public class AgentFxController{
 	@FXML
 	void ready(){
 		agent.sendReady();
+		if(agent.readyAgents.containsAll(agent.allAgents)){
+			System.out.println("all agents ready");
+			agent.startAlgorithm();
+		}
 	}
+	
 	public void stop() {
 		try {
 			agentController.kill();

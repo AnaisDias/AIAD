@@ -1,13 +1,15 @@
 package Scheduler;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import Behaviours.ABTBehaviour;
 import Behaviours.CreateEventBehaviour;
+import gui.AgentFxController;
+import gui.Main;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.domain.DFService;
@@ -18,16 +20,20 @@ import jade.lang.acl.ACLMessage;
 import jade.proto.SubscriptionInitiator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 public class MyAgent extends Agent {
 
 	private static final long serialVersionUID = 1L;
 	private boolean ready = false;
-	public ArrayList<AID> neighbors = new ArrayList<AID>();
+	public ObservableList<AID> neighbors =  FXCollections.observableArrayList();
 	public  ObservableList<AID> allAgents = FXCollections.observableArrayList();
 	public ObservableList<AID> readyAgents = FXCollections.observableArrayList();
 	public ObservableList<MyEvent> events = FXCollections.observableArrayList();
 	public ObservableList<MyEvent> invitations = FXCollections.observableArrayList();
+	private static boolean solutionBlock=false;
 
 	public MyAgent() {
 	}
@@ -206,8 +212,26 @@ public class MyAgent extends Agent {
 		addBehaviour(new ABTBehaviour());
 	}
 	public void solutionReady() {
-		// código para avisar interface que algoritmo acabou
-		
+		// cï¿½digo para avisar interface que algoritmo acabou
+		System.out.println("called ");
+		if(MyAgent.solutionBlock){
+			return;
+		}
+		MyAgent.solutionBlock=true;
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("../gui/template/init.fxml"));
+
+		Stage stage = new Stage();
+		stage.setTitle("treta");
+		Scene scene;
+		try {
+			scene = new Scene(loader.load());
+			stage.setScene(scene);
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		stage.show();
 	}
 	
 }

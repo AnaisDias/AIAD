@@ -36,6 +36,9 @@ public class CreateEventBehaviour extends SimpleBehaviour {
 		if (msg != null) {
 			String stringmsg = msg.toString();
 			String[] sm = stringmsg.split(":");
+			System.out.println("DEBUG 1 : " + stringmsg);
+
+			System.out.println("DEBUG 2 : " + sm[0]);
 			if (sm.length == 2) {
 				switch (sm[0]) {
 				case "INVITE":

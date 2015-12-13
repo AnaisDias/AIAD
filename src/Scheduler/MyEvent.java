@@ -26,6 +26,7 @@ public class MyEvent {
 		this.setSpan(span);
 		this.guests = guests;
 		this.dateProposal=proposal;
+		this.constraints = new ArrayList<Constraint>();
 		this.possibilities=new ArrayList<TimePeriod>();
 	}
 
