@@ -104,6 +104,8 @@ public class AgentFxController{
             stage.show();
 		}
 		
+	
+		
 	}
 	@FXML
 	void ready(){

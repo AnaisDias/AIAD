@@ -86,6 +86,7 @@ public class MyEvent {
 	
 	public void addConstraint(Constraint con){
 		constraints.add(con);
+		System.out.print(con);
 	}
 	
 	public void calculatePossibilities(){

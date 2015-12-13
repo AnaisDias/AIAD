@@ -100,7 +100,7 @@ public class acceptedEventController {
 		ev.addConstraint(new AfterHourConstraint(from_hours.getValue(), from_minutes.getValue()));
 
 		ev.addConstraint(new BeforeHourConstraint(to_hours.getValue(), to_minutes.getValue()));
-		System.out.println("intervall button constraint created");
+		System.out.println("interval button constraint created");
 		 ((Stage) from_hours.getScene().getWindow()).close();
 		
 	}

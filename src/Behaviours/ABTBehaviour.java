@@ -43,6 +43,7 @@ public class ABTBehaviour extends SimpleBehaviour{
 			this.event=event;
 			this.abtbeh = abtBeh;
 			
+			
 			for(AID a: event.guests){
 				if(a.compareTo(agent.getAID())<0) abt.inferiorAgents.add(a);
 			}

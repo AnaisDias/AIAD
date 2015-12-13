@@ -37,7 +37,6 @@ public class CreateEventBehaviour extends SimpleBehaviour {
 			String stmsg = msg.getContent();
 			//String stringmsg = stmsg.toString();
 			String[] sm = stmsg.split("-");
-			System.out.println(sm[1]);
 			if (sm.length == 2) {
 				switch (sm[0]) {
 				case "INVITE":
@@ -150,6 +149,7 @@ public class CreateEventBehaviour extends SimpleBehaviour {
 	}
 
 	private void handleReady(ACLMessage msg) {
+		System.out.println(msg.getSender().getName() + " is ready");
 		((MyAgent)myAgent).readyAgents.add(msg.getSender());
 		if(((MyAgent)myAgent).readyAgents.containsAll(((MyAgent)myAgent).allAgents)){
 			done=true;

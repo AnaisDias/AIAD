@@ -151,6 +151,7 @@ public class MyAgent extends Agent {
 	public void acceptInvitation(MyEvent event){
 		
 		invitations.remove(event);
+		
 		events.add(event);
 		
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
@@ -158,6 +159,10 @@ public class MyAgent extends Agent {
 		msg.setContent("ACCEPT-" + event.getName());
 		event.getGuests().forEach(msg::addReceiver);
 		send(msg);
+		if(invitations.isEmpty()){
+			ready=true;
+			sendReady();
+		}
 		
 	}
 	
@@ -174,10 +179,11 @@ public class MyAgent extends Agent {
 	}
 	
 	public void sendReady(){
+		if(invitations.isEmpty()) ready=true;
 		if(ready){
 			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 			msg.setConversationId("event-creation");
-			msg.setContent("READY-");
+			msg.setContent("READY-no more invitations");
 			allAgents.forEach(msg::addReceiver);
 			send(msg);
 		}
@@ -187,7 +193,7 @@ public class MyAgent extends Agent {
 		if(!ready){
 			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 			msg.setConversationId("event-creation");
-			msg.setContent("HALT-");
+			msg.setContent("HALT-new invitation");
 			allAgents.forEach(msg::addReceiver);
 			send(msg);
 		}
