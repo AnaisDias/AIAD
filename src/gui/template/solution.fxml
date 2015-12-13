@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label layoutX="39.0" layoutY="133.0" text="Solution :">
+         <font>
+            <Font name="Ubuntu" size="29.0" />
+         </font>
+      </Label>
+      <Label layoutX="35.0" layoutY="214.0" text="Solution cost:">
+         <font>
+            <Font name="Ubuntu" size="29.0" />
+         </font>
+      </Label>
+      <Label layoutX="252.0" layoutY="31.0" text="Nome">
+         <font>
+            <Font name="Ubuntu" size="29.0" />
+         </font>
+      </Label>
+      <Label fx:id="solution" layoutX="199.0" layoutY="135.0" prefHeight="30.0" prefWidth="355.0" text=" " textFill="#b2a5a5">
+         <font>
+            <Font name="Ubuntu" size="25.0" />
+         </font>
+      </Label>
+      <Label fx:id="cost" layoutX="229.0" layoutY="218.0" prefHeight="30.0" prefWidth="326.0" text=" " textFill="#b2a5a5">
+         <font>
+            <Font name="Ubuntu" size="25.0" />
+         </font>
+      </Label>
+   </children>
+</Pane>
