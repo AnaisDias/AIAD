@@ -16,10 +16,14 @@ import Scheduler.MyEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 public class acceptedEventController {
 
+	@FXML
+	Label timespan;
+	
 	@FXML
 	DatePicker from_date;
 
@@ -72,7 +76,9 @@ public class acceptedEventController {
 			hour.getItems().add(i);
 		}
 		
-		
+		String[] split=(""+ev.getDateProposal()).split(",");
+		String sp="From "+split[0] +" to "+split[1];
+		timespan.setText(sp);
 		
 	}
 	
