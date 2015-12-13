@@ -93,6 +93,8 @@ public class createEventController {
 			time_from_hours.getItems().add(i);
 			time_to_hours.getItems().add(i);
 		}
+		
+		
 	}
 	
 	@FXML

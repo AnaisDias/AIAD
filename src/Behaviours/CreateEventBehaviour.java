@@ -21,6 +21,7 @@ import jade.lang.acl.ACLCodec.CodecException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.StringACLCodec;
+import javafx.beans.property.SimpleBooleanProperty;
 
 public class CreateEventBehaviour extends SimpleBehaviour {
 	private static final long serialVersionUID = 1L;
@@ -152,7 +153,10 @@ public class CreateEventBehaviour extends SimpleBehaviour {
 		System.out.println(msg.getSender().getName() + " is ready");
 		((MyAgent)myAgent).readyAgents.add(msg.getSender());
 		if(((MyAgent)myAgent).readyAgents.containsAll(((MyAgent)myAgent).allAgents)){
+			((MyAgent)myAgent).allReady = new SimpleBooleanProperty(true);
+			System.out.println("All agents are ready");
 			done=true;
+			
 		}
 		else{
 			done=false;
