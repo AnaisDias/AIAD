@@ -32,17 +32,19 @@ public class ABTBehaviour extends SimpleBehaviour{
 	private ArrayList<VirtualAgent> virtualAgents = new ArrayList<VirtualAgent>();
 	
 	public static class VirtualAgent {
-		private ABT abt;
+		private ABT abt = new ABT();
 		private MyAgent agent;
 		private MyEvent event;
 		private boolean done;
 		private ABTBehaviour abtbeh;
 		
 		public VirtualAgent(MyAgent agent, MyEvent event, ABTBehaviour abtBeh){
+			
 			this.agent=agent;
 			this.event=event;
 			this.abtbeh = abtBeh;
 			
+			abt.inferiorAgents = new ArrayList<AID>();
 			
 			for(AID a: event.guests){
 				if(a.compareTo(agent.getAID())<0) abt.inferiorAgents.add(a);

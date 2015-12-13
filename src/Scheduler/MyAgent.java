@@ -19,6 +19,7 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.proto.SubscriptionInitiator;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -35,6 +36,7 @@ public class MyAgent extends Agent {
 	public ObservableList<MyEvent> events = FXCollections.observableArrayList();
 	public ObservableList<MyEvent> invitations = FXCollections.observableArrayList();
 	public HashMap<String, AID> agentsMap = new HashMap<String, AID>();
+	public SimpleBooleanProperty allReady= new SimpleBooleanProperty(false);
 	private static boolean solutionBlock=false;
 
 	public MyAgent() {

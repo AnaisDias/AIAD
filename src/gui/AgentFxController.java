@@ -86,6 +86,12 @@ public class AgentFxController{
 		eventsInvited.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		eventsAccepted.setItems(agent.events);
 		eventsInvited.setItems(agent.invitations);
+		
+		agent.allReady.addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                agent.startAlgorithm();
+            }
+        });
 	}
 
 	@FXML
@@ -102,8 +108,6 @@ public class AgentFxController{
             
             stage.show();
 		}
-		
-	
 		
 	}
 	
