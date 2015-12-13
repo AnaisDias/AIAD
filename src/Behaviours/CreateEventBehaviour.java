@@ -34,11 +34,10 @@ public class CreateEventBehaviour extends SimpleBehaviour {
 		ACLMessage msg = myAgent.receive(msgtemp);
 
 		if (msg != null) {
-			String stringmsg = msg.toString();
+			String stmsg = msg.getContent();
+			String stringmsg = stmsg.toString();
 			String[] sm = stringmsg.split(":");
-			System.out.println("DEBUG 1 : " + stringmsg);
-
-			System.out.println("DEBUG 2 : " + sm[0]);
+			System.out.println(stringmsg);
 			if (sm.length == 2) {
 				switch (sm[0]) {
 				case "INVITE":
