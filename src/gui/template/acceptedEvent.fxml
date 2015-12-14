@@ -5,14 +5,15 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
+
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label layoutX="185.0" layoutY="14.0" prefHeight="41.0" prefWidth="258.0" text="Accepted event">
+      <Label layoutX="186.0" layoutY="21.0" prefHeight="41.0" prefWidth="258.0" text="Accepted event">
          <font>
             <Font name="Ubuntu" size="35.0" />
          </font>
       </Label>
-      <Label layoutX="244.0" layoutY="97.0" prefHeight="41.0" prefWidth="140.0" text="Availability:">
+      <Label layoutX="248.0" layoutY="67.0" prefHeight="41.0" prefWidth="140.0" text="Availability:">
          <font>
             <Font name="Ubuntu" size="25.0" />
          </font>
@@ -43,12 +44,12 @@
             <Font size="19.0" />
          </font>
       </Label>
-      <Button layoutX="100.0" layoutY="271.0" mnemonicParsing="false" onAction="#intervalButton" text="Send time interval">
+      <Button layoutX="100.0" layoutY="271.0" mnemonicParsing="false" text="Send time interval" onAction="#intervalButton" >
          <font>
             <Font name="Ubuntu" size="21.0" />
          </font>
       </Button>
-      <Separator layoutX="362.0" layoutY="145.0" orientation="VERTICAL" prefHeight="200.0" />
+      <Separator layoutX="361.0" layoutY="129.0" orientation="VERTICAL" prefHeight="200.0" />
       <DatePicker fx:id="date" layoutX="444.0" layoutY="157.0" prefHeight="25.0" prefWidth="90.0" />
       <ChoiceBox fx:id="hour" layoutX="424.0" layoutY="201.0" prefHeight="25.0" prefWidth="55.0" />
       <Label layoutX="487.0" layoutY="201.0" text=":">
@@ -57,13 +58,10 @@
          </font>
       </Label>
       <ChoiceBox fx:id="minute" layoutX="500.0" layoutY="201.0" prefHeight="25.0" prefWidth="55.0" />
-      <Button layoutX="431.0" layoutY="271.0" mnemonicParsing="false" onAction="#specificButton" text="Send time">
+      <Button layoutX="431.0" layoutY="271.0" mnemonicParsing="false" text="Send time"  onAction="#specificButton">
          <font>
             <Font name="Ubuntu" size="21.0" />
          </font>
       </Button>
-      <Label fx:id="timespan" layoutX="158.0" layoutY="58.0" prefHeight="15.0" prefWidth="312.0" text="Time span" />
-      <Label fx:id="duration" layoutX="163.0" layoutY="80.0" prefHeight="15.0" prefWidth="312.0" text="duration" />
-      <Label fx:id="error" layoutX="31.0" layoutY="345.0" prefHeight="39.0" prefWidth="549.0" textFill="RED" />
    </children>
 </Pane>

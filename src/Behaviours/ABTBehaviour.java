@@ -167,6 +167,7 @@ public class ABTBehaviour extends SimpleBehaviour{
 			}
 			
 			if(abtbeh.done) {
+				System.out.println(agent.getName() + "terminating with solution " + event.getAgreedTimePeriod() + " " + event.getAgreedCost());
 				agent.solutionReady();
 			}
 			

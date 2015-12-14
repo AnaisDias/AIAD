@@ -235,7 +235,7 @@ public class MyAgent extends Agent {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("../gui/template/solution.fxml"));
 				loader.setController(new solutionController(events,getAID().getName()));
 				Stage stage = new Stage();
-				stage.setTitle("treta");
+				stage.setTitle("Solutions");
 				Scene scene;
 				try {
 					scene = new Scene(loader.load());

@@ -14,23 +14,26 @@ public class solutionController {
 	ListView<String> sol;
 	@FXML
 	Label name;
-	//adicioanr aprametros qe or preciso pelo s
+	String st;
+	ObservableList<MyEvent> ev;
+	
 	public solutionController(ObservableList<MyEvent> events, String string){
-		
-		name.setText(string);
+		st=string;
+		ev=events;
+	}
+	
+	@FXML
+	protected void initialize() {
+		System.out.println(st);
+		name.setText(st);
 		ObservableList<String> temp = FXCollections.observableArrayList();
-		for (MyEvent event : events) {
+		for (MyEvent event : ev) {
 			
 			String temp2 = "Event - " + event.getName() + "  Solution : " + event.getAgreedTimePeriod().toString() + " Cost: " + event.getAgreedCost();
 			temp.add(temp2);
 			
 		}
 		sol.setItems(temp);
-	}
-	
-	@FXML
-	protected void initialize() {
-		
 		
 	}
 	
