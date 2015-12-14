@@ -37,6 +37,8 @@
 		</TitledPane>
 		<Button layoutX="163.0" layoutY="330.0" mnemonicParsing="false"
 			text="Accept" onAction="#acceptEvents"/>
-		
+		<Button cancelButton="true" layoutX="50.0" layoutY="330.0"
+			mnemonicParsing="false" text="Decline" onAction="#declineEvents"/>
+			
 	</children>
 </Pane>

@@ -18,6 +18,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
@@ -27,6 +28,9 @@ public class createEventController {
 
 	@FXML
     public ListView<String> agentsToInviteList;
+
+	@FXML
+    private Label error;
 	
 	@FXML
     private TextField name;
@@ -101,6 +105,19 @@ public class createEventController {
 	@FXML
 	void createEvent(){
 		System.out.println("create event button clicked");
+		
+		if(name.getText()==null 
+				|| date_from.getValue() == null 
+				|| date_to.getValue() == null 
+				|| time_from_hours.getValue() == null 
+				|| time_from_minutes.getValue() == null 
+				|| time_to_hours.getValue() == null 
+				|| time_to_minutes.getValue() == null  ){
+			error.setText("Please fill all the requested inputs");
+			System.out.println("soumerda");
+			return ;
+		}
+		
 		invitedAgents= new TreeSet<AID>();
 			
 		for (String aid : agentsToInviteList.getSelectionModel().getSelectedItems()) {
@@ -131,6 +148,12 @@ public class createEventController {
 		cal_start.set(Calendar.MINUTE,time_from_minutes.getValue());
 		cal_end.set(Calendar.HOUR,time_to_hours.getValue());
 		cal_end.set(Calendar.MINUTE,time_to_minutes.getValue());
+		
+		cal_end.set(Calendar.MINUTE,time_to_minutes.getValue());
+		if(cal_start.after(cal_end)){
+			error.setText("Error: Invalid time interval.");
+			return ;
+		}
 		
 		TimePeriod period=new TimePeriod(cal_start,cal_end);
 		

@@ -5,7 +5,6 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label layoutX="186.0" layoutY="21.0" prefHeight="41.0" prefWidth="258.0" text="Accepted event">
@@ -13,55 +12,55 @@
             <Font name="Ubuntu" size="35.0" />
          </font>
       </Label>
-      <Label layoutX="248.0" layoutY="67.0" prefHeight="41.0" prefWidth="140.0" text="Availability:">
+      <Label layoutX="248.0" layoutY="108.0" prefHeight="41.0" prefWidth="140.0" text="Availability:">
          <font>
             <Font name="Ubuntu" size="25.0" />
          </font>
       </Label>
-      <Label layoutX="21.0" layoutY="156.0" text="From:">
+      <Label layoutX="137.0" layoutY="156.0" text="From:">
          <font>
             <Font size="19.0" />
          </font>
       </Label>
-      <Label layoutX="46.0" layoutY="203.0" text="To:">
+      <Label layoutX="139.0" layoutY="203.0" text="To:">
          <font>
             <Font size="19.0" />
          </font>
       </Label>
-      <DatePicker fx:id="from_date" layoutX="86.0" layoutY="156.0" prefHeight="25.0" prefWidth="90.0" />
-      <DatePicker fx:id="to_date" layoutX="86.0" layoutY="203.0" prefHeight="25.0" prefWidth="90.0" />
-      <ChoiceBox fx:id="from_hours" layoutX="200.0" layoutY="157.0" prefHeight="25.0" prefWidth="55.0" />
-      <Label layoutX="261.0" layoutY="157.0" text=":">
+      <DatePicker fx:id="from_date" layoutX="202.0" layoutY="156.0" prefHeight="25.0" prefWidth="90.0" />
+      <DatePicker fx:id="to_date" layoutX="202.0" layoutY="203.0" prefHeight="25.0" prefWidth="90.0" />
+      <ChoiceBox fx:id="from_hours" layoutX="316.0" layoutY="157.0" prefHeight="25.0" prefWidth="55.0" />
+      <Label layoutX="377.0" layoutY="157.0" text=":">
          <font>
             <Font size="19.0" />
          </font>
       </Label>
-      <ChoiceBox fx:id="from_minutes" layoutX="275.0" layoutY="157.0" prefHeight="25.0" prefWidth="55.0" />
-      <ChoiceBox fx:id="to_minutes" layoutX="275.0" layoutY="204.0" prefHeight="25.0" prefWidth="55.0" />
-      <ChoiceBox fx:id="to_hours" layoutX="200.0" layoutY="204.0" prefHeight="25.0" prefWidth="55.0" />
-      <Label layoutX="261.0" layoutY="204.0" text=":">
+      <ChoiceBox fx:id="from_minutes" layoutX="391.0" layoutY="157.0" prefHeight="25.0" prefWidth="55.0" />
+      <ChoiceBox fx:id="to_minutes" layoutX="391.0" layoutY="204.0" prefHeight="25.0" prefWidth="55.0" />
+      <ChoiceBox fx:id="to_hours" layoutX="316.0" layoutY="204.0" prefHeight="25.0" prefWidth="55.0" />
+      <Label layoutX="377.0" layoutY="204.0" text=":">
          <font>
             <Font size="19.0" />
          </font>
       </Label>
-      <Button layoutX="100.0" layoutY="271.0" mnemonicParsing="false" text="Send time interval" onAction="#intervalButton" >
+      <Button contentDisplay="CENTER" layoutX="209.0" layoutY="311.0" mnemonicParsing="false" onAction="#intervalButton" text="Send time interval">
          <font>
             <Font name="Ubuntu" size="21.0" />
          </font>
       </Button>
-      <Separator layoutX="361.0" layoutY="129.0" orientation="VERTICAL" prefHeight="200.0" />
-      <DatePicker fx:id="date" layoutX="444.0" layoutY="157.0" prefHeight="25.0" prefWidth="90.0" />
-      <ChoiceBox fx:id="hour" layoutX="424.0" layoutY="201.0" prefHeight="25.0" prefWidth="55.0" />
-      <Label layoutX="487.0" layoutY="201.0" text=":">
+      <Label fx:id="timespan" alignment="CENTER" contentDisplay="CENTER" layoutX="97.0" layoutY="67.0" prefHeight="19.0" prefWidth="443.0" text="timespan" textAlignment="CENTER" textFill="#323232">
          <font>
-            <Font size="19.0" />
+            <Font size="15.0" />
+         </font></Label>
+      <Label fx:id="error" alignment="CENTER" contentDisplay="CENTER" layoutX="53.0" layoutY="272.0" prefHeight="25.0" prefWidth="489.0" text=" " textAlignment="CENTER" textFill="RED">
+         <font>
+            <Font size="14.0" />
          </font>
       </Label>
-      <ChoiceBox fx:id="minute" layoutX="500.0" layoutY="201.0" prefHeight="25.0" prefWidth="55.0" />
-      <Button layoutX="431.0" layoutY="271.0" mnemonicParsing="false" text="Send time"  onAction="#specificButton">
+      <Label fx:id="span" alignment="CENTER" contentDisplay="CENTER" layoutX="120.0" layoutY="90.0" prefHeight="19.0" prefWidth="369.0" text="span" textAlignment="CENTER" textFill="#403f3f">
          <font>
-            <Font name="Ubuntu" size="21.0" />
+            <Font size="15.0" />
          </font>
-      </Button>
+      </Label>
    </children>
 </Pane>

@@ -239,7 +239,7 @@ public class MyAgent extends Agent {
 			@Override
 			public void run() {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("../gui/template/solution.fxml"));
-				loader.setController(new solutionController(events,getAID().getName()));
+				loader.setController(new solutionController(events,getAID().getLocalName()));
 				Stage stage = new Stage();
 				stage.setTitle("Solutions");
 				Scene scene;
