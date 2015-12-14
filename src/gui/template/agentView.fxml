@@ -35,14 +35,8 @@
 				<ListView prefHeight="200.0" prefWidth="200.0" fx:id="eventsAccepted" />
 			</content>
 		</TitledPane>
-		<Button layoutX="163.0" layoutY="327.0" mnemonicParsing="false"
+		<Button layoutX="163.0" layoutY="330.0" mnemonicParsing="false"
 			text="Accept" onAction="#acceptEvents"/>
-		<Button cancelButton="true" layoutX="50.0" layoutY="330.0"
-			mnemonicParsing="false" text="Decline" onAction="#declineEvents"/>
-			<Button layoutX="263.0" layoutY="342.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="84.0" text="Ready" onAction="#ready">
-         <font>
-            <Font size="17.0" />
-         </font>
-      </Button>
+		
 	</children>
 </Pane>
