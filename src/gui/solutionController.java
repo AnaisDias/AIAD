@@ -28,9 +28,14 @@ public class solutionController {
 		name.setText(st);
 		ObservableList<String> temp = FXCollections.observableArrayList();
 		for (MyEvent event : ev) {
-			
+			if(event.getAgreedTimePeriod() == null){
+				String temp2 = "Event - " + event.getName() + "  Solution : No solution found. Cost: " + event.getAgreedCost();
+				temp.add(temp2);
+			}
+			else{
 			String temp2 = "Event - " + event.getName() + "  Solution : " + event.getAgreedTimePeriod().toString() + " Cost: " + event.getAgreedCost();
 			temp.add(temp2);
+			}
 			
 		}
 		sol.setItems(temp);

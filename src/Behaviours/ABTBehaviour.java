@@ -155,8 +155,10 @@ public class ABTBehaviour extends SimpleBehaviour{
 
 		private void terminate(int cost) {
 			event.setAgreedCost(cost);
-			event.setAgreedTimePeriod(abt.assigned.sol);
-			
+			if(cost!=0){
+			event.setAgreedTimePeriod(null);
+			}
+			else event.setAgreedTimePeriod(abt.assigned.sol);
 			sendTerminate(cost);
 			agentdone = true;
 			
