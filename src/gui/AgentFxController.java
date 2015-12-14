@@ -102,7 +102,7 @@ public class AgentFxController{
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("template/acceptedEvent.fxml"));
 			loader.setController(new acceptedEventController(this.agent,ev));
             Stage stage = new Stage();
-            stage.setTitle(ev.getName());
+            stage.setTitle(agent.getName() + " : " + ev.getName());
             Scene scene = new Scene(loader.load());
             stage.setScene(scene);
             

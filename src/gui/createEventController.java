@@ -26,7 +26,7 @@ import javafx.stage.Stage;
 public class createEventController {
 
 	@FXML
-    public ListView<AID> agentsToInviteList;
+    public ListView<String> agentsToInviteList;
 	
 	@FXML
     private TextField name;
@@ -83,7 +83,7 @@ public class createEventController {
 			}
 		}
 		agentsToInviteList.setItems(allAgentsShow);*/
-		agentsToInviteList.setItems(agent.neighbors);
+		agentsToInviteList.setItems(agent.neighborsShow);
 
 		for(int i=0;i<61;i++){
 			span_minutes.getItems().add(i);
@@ -103,8 +103,8 @@ public class createEventController {
 		System.out.println("create event button clicked");
 		invitedAgents= new TreeSet<AID>();
 			
-		for (AID aid : agentsToInviteList.getSelectionModel().getSelectedItems()) {
-			invitedAgents.add(aid);
+		for (String aid : agentsToInviteList.getSelectionModel().getSelectedItems()) {
+			invitedAgents.add(agent.agentsMap.get(aid));
 			
 		}
 		

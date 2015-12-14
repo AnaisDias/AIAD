@@ -31,6 +31,7 @@ public class MyAgent extends Agent {
 	private static final long serialVersionUID = 1L;
 	private boolean ready = false;
 	public ObservableList<AID> neighbors =  FXCollections.observableArrayList();
+	public ObservableList<String> neighborsShow =  FXCollections.observableArrayList();
 	public  ObservableList<AID> allAgents = FXCollections.observableArrayList();
 	public ObservableList<AID> readyAgents = FXCollections.observableArrayList();
 	public ObservableList<MyEvent> events = FXCollections.observableArrayList();
@@ -114,11 +115,16 @@ public class MyAgent extends Agent {
 	private void addAgent(AID agent){
 		allAgents.add(agent);
 		neighbors.add(agent);
+		neighborsShow.add(agent.getName());
 		agentsMap.put(agent.getName(),agent);
 	}
 	
 	private void removeAgent(AID agent){
 		allAgents.remove(agent);
+		neighbors.remove(agent);
+		neighborsShow.remove(agent.getName());
+		agentsMap.remove(agent.getName(),agent);
+
 	}
 	
 	public void sendInvitations(MyEvent event){
